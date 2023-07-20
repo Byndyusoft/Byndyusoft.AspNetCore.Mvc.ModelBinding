@@ -14,6 +14,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<FileService>();
 builder.Services.Configure<SaveFileSettings>(builder.Configuration.GetSection(nameof(SaveFileSettings)));
+builder.Services.AddMultipartFormDataFileProvider();
 
 var app = builder.Build();
 

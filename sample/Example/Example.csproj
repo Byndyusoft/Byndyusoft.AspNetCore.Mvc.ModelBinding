@@ -6,7 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Byndyusoft.ModelResult.AspNetCore" Version="1.1.4" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\MultipartFormData.Streaming\MultipartFormData.Streaming.csproj" />
   </ItemGroup>
 
 </Project>
