@@ -25,6 +25,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MultipartFormData.Streaming
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "tests\UnitTests\UnitTests.csproj", "{0A74CB21-E062-4C75-89C7-9C216E65DB65}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sample", "sample", "{ADBF5EA0-CA15-459C-8949-C3EA53590D25}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example", "sample\Example\Example.csproj", "{D4F57A44-30FE-471F-B62C-3D95FB8288FA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,10 @@ Global
 		{0A74CB21-E062-4C75-89C7-9C216E65DB65}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A74CB21-E062-4C75-89C7-9C216E65DB65}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A74CB21-E062-4C75-89C7-9C216E65DB65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4F57A44-30FE-471F-B62C-3D95FB8288FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4F57A44-30FE-471F-B62C-3D95FB8288FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4F57A44-30FE-471F-B62C-3D95FB8288FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4F57A44-30FE-471F-B62C-3D95FB8288FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,6 +56,7 @@ Global
 		{AAE6C860-0438-4BA9-A259-608AB9ED9CB9} = {1E302571-E1B1-4F11-AEA4-D318FAE86286}
 		{AD41F8C7-5D65-4EB8-9C75-D945ED46D8F8} = {F298540A-82E2-4421-9525-BBAC087AE77C}
 		{0A74CB21-E062-4C75-89C7-9C216E65DB65} = {CD2527C5-D6B4-4E6E-A878-FFE273B47511}
+		{D4F57A44-30FE-471F-B62C-3D95FB8288FA} = {ADBF5EA0-CA15-459C-8949-C3EA53590D25}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C5A3EF0C-96D2-472C-A367-AB34B065DC56}
