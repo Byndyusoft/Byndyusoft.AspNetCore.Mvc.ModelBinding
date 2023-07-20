@@ -1,0 +1,69 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32519.379
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExampleProject", "src\ExampleProject\ExampleProject.csproj", "{77F03E9B-FD33-4B1D-B365-059B6FCC9A3A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExampleTestsProject", "tests\ExampleTestsProject\ExampleTestsProject.csproj", "{BFDC0846-932B-48DB-94DB-C4A333B81A14}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleProject.SecondPackage", "src\ExampleProject.SecondPackage\ExampleProject.SecondPackage.csproj", "{02C16F03-CE3D-4A38-B509-7C07C552A356}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotPackableProject", "src\NotPackableProject\NotPackableProject.csproj", "{1024F355-8DC1-469A-83BB-16E2218A46A2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{27E75EBF-ED9E-4151-9606-AA837FB9BBAF}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F298540A-82E2-4421-9525-BBAC087AE77C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{CD2527C5-D6B4-4E6E-A878-FFE273B47511}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{1E302571-E1B1-4F11-AEA4-D318FAE86286}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{AAE6C860-0438-4BA9-A259-608AB9ED9CB9}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\pushOrPullRequest.yml = .github\workflows\pushOrPullRequest.yml
+		.github\workflows\release.yml = .github\workflows\release.yml
+		.github\workflows\releasePrerelease.yml = .github\workflows\releasePrerelease.yml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{77F03E9B-FD33-4B1D-B365-059B6FCC9A3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77F03E9B-FD33-4B1D-B365-059B6FCC9A3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77F03E9B-FD33-4B1D-B365-059B6FCC9A3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77F03E9B-FD33-4B1D-B365-059B6FCC9A3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFDC0846-932B-48DB-94DB-C4A333B81A14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFDC0846-932B-48DB-94DB-C4A333B81A14}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFDC0846-932B-48DB-94DB-C4A333B81A14}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFDC0846-932B-48DB-94DB-C4A333B81A14}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02C16F03-CE3D-4A38-B509-7C07C552A356}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02C16F03-CE3D-4A38-B509-7C07C552A356}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02C16F03-CE3D-4A38-B509-7C07C552A356}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02C16F03-CE3D-4A38-B509-7C07C552A356}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1024F355-8DC1-469A-83BB-16E2218A46A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1024F355-8DC1-469A-83BB-16E2218A46A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1024F355-8DC1-469A-83BB-16E2218A46A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1024F355-8DC1-469A-83BB-16E2218A46A2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C5A3EF0C-96D2-472C-A367-AB34B065DC56}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{77F03E9B-FD33-4B1D-B365-059B6FCC9A3A} = {F298540A-82E2-4421-9525-BBAC087AE77C}
+		{02C16F03-CE3D-4A38-B509-7C07C552A356} = {F298540A-82E2-4421-9525-BBAC087AE77C}
+		{1024F355-8DC1-469A-83BB-16E2218A46A2} = {F298540A-82E2-4421-9525-BBAC087AE77C}
+		{BFDC0846-932B-48DB-94DB-C4A333B81A14} = {CD2527C5-D6B4-4E6E-A878-FFE273B47511}
+		{1E302571-E1B1-4F11-AEA4-D318FAE86286} = {27E75EBF-ED9E-4151-9606-AA837FB9BBAF}
+		{AAE6C860-0438-4BA9-A259-608AB9ED9CB9} = {1E302571-E1B1-4F11-AEA4-D318FAE86286}
+	EndGlobalSection
+EndGlobal
