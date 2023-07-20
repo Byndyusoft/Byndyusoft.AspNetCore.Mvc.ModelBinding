@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32519.379
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{27E75EBF-ED9E-4151-9606-AA837FB9BBAF}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F298540A-82E2-4421-9525-BBAC087AE77C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{CD2527C5-D6B4-4E6E-A878-FFE273B47511}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{1E302571-E1B1-4F11-AEA4-D318FAE86286}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{AAE6C860-0438-4BA9-A259-608AB9ED9CB9}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\pushOrPullRequest.yml = .github\workflows\pushOrPullRequest.yml
+		.github\workflows\release.yml = .github\workflows\release.yml
+		.github\workflows\releasePrerelease.yml = .github\workflows\releasePrerelease.yml
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MultipartFormData.Streaming", "src\MultipartFormData.Streaming\MultipartFormData.Streaming.csproj", "{AD41F8C7-5D65-4EB8-9C75-D945ED46D8F8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "tests\UnitTests\UnitTests.csproj", "{0A74CB21-E062-4C75-89C7-9C216E65DB65}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AD41F8C7-5D65-4EB8-9C75-D945ED46D8F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD41F8C7-5D65-4EB8-9C75-D945ED46D8F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD41F8C7-5D65-4EB8-9C75-D945ED46D8F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD41F8C7-5D65-4EB8-9C75-D945ED46D8F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A74CB21-E062-4C75-89C7-9C216E65DB65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A74CB21-E062-4C75-89C7-9C216E65DB65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A74CB21-E062-4C75-89C7-9C216E65DB65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A74CB21-E062-4C75-89C7-9C216E65DB65}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1E302571-E1B1-4F11-AEA4-D318FAE86286} = {27E75EBF-ED9E-4151-9606-AA837FB9BBAF}
+		{AAE6C860-0438-4BA9-A259-608AB9ED9CB9} = {1E302571-E1B1-4F11-AEA4-D318FAE86286}
+		{AD41F8C7-5D65-4EB8-9C75-D945ED46D8F8} = {F298540A-82E2-4421-9525-BBAC087AE77C}
+		{0A74CB21-E062-4C75-89C7-9C216E65DB65} = {CD2527C5-D6B4-4E6E-A878-FFE273B47511}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C5A3EF0C-96D2-472C-A367-AB34B065DC56}
+	EndGlobalSection
+EndGlobal

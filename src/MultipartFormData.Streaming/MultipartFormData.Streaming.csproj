@@ -1,0 +1,10 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <AssemblyName>Byndyusoft.AspNetCore.Mvc.ModelBinding.$(MSBuildProjectName)</AssemblyName>
+    <RootNamespace>Byndyusoft.AspNetCore.Mvc.ModelBinding.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+</Project>
