@@ -34,7 +34,7 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Int
             HttpRequest request,
             CancellationToken cancellationToken);
 
-        Task<MultipartFormDataDto> GetFormDataAsync(
+        Task<Dtos.MultipartFormDataCollection> GetFormDataAsync(
             HttpRequest request,
             CancellationToken cancellationToken);
     }

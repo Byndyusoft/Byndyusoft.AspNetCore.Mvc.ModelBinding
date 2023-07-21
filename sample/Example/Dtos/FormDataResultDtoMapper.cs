@@ -4,11 +4,11 @@ namespace Byndyusoft.Example.Dtos
 {
     public static class FormDataResultDtoMapper
     {
-        public static FormDataResultDto MapFrom(MultipartFormDataDto multipartFormDataDto, FileResultDto[] fileResultDtos)
+        public static FormDataResultDto MapFrom(MultipartFormDataCollection multipartFormDataCollection, FileResultDto[] fileResultDtos)
         {
             return new FormDataResultDto
             {
-                Fields = multipartFormDataDto.Fields,
+                Fields = multipartFormDataCollection.Fields,
                 Files = fileResultDtos
             };
         }

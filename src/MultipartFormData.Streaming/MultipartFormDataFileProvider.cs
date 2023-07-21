@@ -54,7 +54,7 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming
             return EnumerateFilesAsync(reader, section, cancellationToken);
         }
 
-        public async Task<MultipartFormDataDto> GetFormDataAsync(
+        public async Task<Dtos.MultipartFormDataCollection> GetFormDataAsync(
             HttpRequest request,
             CancellationToken cancellationToken)
         {
@@ -83,7 +83,7 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming
             }
 
             var files = EnumerateFilesAsync(reader, section, cancellationToken);
-            var multipartFormDataDto = new MultipartFormDataDto(formAccumulator.GetResults(), files);
+            var multipartFormDataDto = new Dtos.MultipartFormDataCollection(formAccumulator.GetResults(), files);
 
             return multipartFormDataDto;
         }

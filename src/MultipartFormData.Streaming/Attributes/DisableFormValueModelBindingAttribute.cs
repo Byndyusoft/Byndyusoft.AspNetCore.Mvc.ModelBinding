@@ -17,7 +17,7 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Att
         public void OnResourceExecuting(ResourceExecutingContext context)
         {
             var factories = context.ValueProviderFactories;
-            factories.RemoveType<FormValueProviderFactory>();
+            factories.RemoveType<FormDataValueProviderFactory>();
             factories.RemoveType<FormFileValueProviderFactory>();
             factories.RemoveType<JQueryFormValueProviderFactory>();
         }
