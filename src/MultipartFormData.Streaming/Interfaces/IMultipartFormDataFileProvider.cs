@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Byndyusoft.ModelResult.ModelResults;
 using Microsoft.AspNetCore.Http;
@@ -13,12 +14,24 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Int
         /// <summary>
         ///     Извлекает метаданные файла и поток для чтения
         /// </summary>
-        /// <param name="request">HTTP Request c файлом в multipart from data</param>
-        /// <param name="cancellationToken">Токен отмены операции</param>
+        /// <param name="request">HTTP Request c файлом в multipart form data</param>
+        /// <param name="cancellationToken">Токен отмены</param>
         /// <returns>
         ///     Возвращает имя, длину файла и поток для чтения
-        ///     Возвращает ошибку, если извлечь файл не получилось 
+        ///     Возвращает ошибку, если извлечь файл не получилось
         /// </returns>
         Task<ModelResult<MultipartFormDataFileDto>> GetAsync(HttpRequest request, CancellationToken cancellationToken);
+
+        /// <summary>
+        ///     Извлекает метаданные файлов и потоки для чтения
+        /// </summary>
+        /// <param name="request">HTTP Request с файлами в multipart form data</param>
+        /// <param name="cancellationToken">Токен отмены</param>
+        /// <returns>
+        ///     Перечисление файлов, стримы которых нужно считывать по порядку
+        /// </returns>
+        IAsyncEnumerable<MultipartFormDataFileDto> EnumerateAsync(
+            HttpRequest request,
+            CancellationToken cancellationToken);
     }
 }

@@ -16,13 +16,15 @@ namespace Byndyusoft.Example.Services
             _saveFileSettings = saveFileSettings.Value;
         }
 
-        public async Task SaveFileAsync(Stream stream, string fileName, CancellationToken cancellationToken)
+        public async Task<string> SaveFileAsync(Stream stream, string fileName, CancellationToken cancellationToken)
         {
             var filePath = Path.Combine(_saveFileSettings.FolderName, fileName);
             await using var fileStream = File.OpenWrite(filePath);
             await stream.CopyToAsync(fileStream, cancellationToken);
 
             await fileStream.FlushAsync(cancellationToken);
+
+            return filePath;
         }
     }
 }

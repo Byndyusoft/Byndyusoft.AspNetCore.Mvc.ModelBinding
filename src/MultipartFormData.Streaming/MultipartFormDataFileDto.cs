@@ -8,6 +8,11 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming
     public class MultipartFormDataFileDto
     {
         /// <summary>
+        ///     Имя секции
+        /// </summary>
+        public string Name { get; set; } = default!;
+
+        /// <summary>
         ///     Имя файла
         /// </summary>
         public string FileName { get; set; } = default!;
