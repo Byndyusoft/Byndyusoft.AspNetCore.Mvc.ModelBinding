@@ -1,13 +1,13 @@
-﻿using Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming;
+﻿using Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Dtos;
 using Microsoft.AspNetCore.Http;
 
 namespace Byndyusoft.Example.Dtos
 {
     public static class ResultDtoMapper
     {
-        public static ResultDto MapFrom(MultipartFormDataFileDto multipartFormDataFileDto, string filePath)
+        public static FileResultDto MapFrom(MultipartFormDataFileDto multipartFormDataFileDto, string filePath)
         {
-            return new ResultDto
+            return new FileResultDto
             {
                 Name = multipartFormDataFileDto.Name,
                 FileName = multipartFormDataFileDto.FileName,
@@ -16,9 +16,9 @@ namespace Byndyusoft.Example.Dtos
             };
         }
 
-        public static ResultDto MapFrom(IFormFile formFile, string filePath)
+        public static FileResultDto MapFrom(IFormFile formFile, string filePath)
         {
-            return new ResultDto
+            return new FileResultDto
             {
                 Name = formFile.Name,
                 FileName = formFile.FileName,

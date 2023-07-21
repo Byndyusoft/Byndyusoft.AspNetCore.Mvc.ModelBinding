@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Byndyusoft.ModelResult.ModelResults;
+using Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Dtos;
 using Microsoft.AspNetCore.Http;
 
 namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Interfaces
@@ -20,7 +20,7 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Int
         ///     Возвращает имя, длину файла и поток для чтения
         ///     Возвращает ошибку, если извлечь файл не получилось
         /// </returns>
-        Task<ModelResult<MultipartFormDataFileDto>> GetAsync(HttpRequest request, CancellationToken cancellationToken);
+        Task<MultipartFormDataFileDto> GetAsync(HttpRequest request, CancellationToken cancellationToken);
 
         /// <summary>
         ///     Извлекает метаданные файлов и потоки для чтения
@@ -30,7 +30,11 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Int
         /// <returns>
         ///     Перечисление файлов, стримы которых нужно считывать по порядку
         /// </returns>
-        IAsyncEnumerable<MultipartFormDataFileDto> EnumerateAsync(
+        Task<IAsyncEnumerable<MultipartFormDataFileDto>> EnumerateAsync(
+            HttpRequest request,
+            CancellationToken cancellationToken);
+
+        Task<MultipartFormDataDto> GetFormDataAsync(
             HttpRequest request,
             CancellationToken cancellationToken);
     }

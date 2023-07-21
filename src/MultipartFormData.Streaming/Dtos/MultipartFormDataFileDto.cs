@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming
+namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Dtos
 {
     /// <summary>
     ///     Данные файла из multipart form data

@@ -3,10 +3,10 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Attributes;
+using Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Dtos;
 using Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Interfaces;
 using Byndyusoft.Example.Dtos;
 using Byndyusoft.Example.Services;
-using Byndyusoft.ModelResult.AspNetCore.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -34,7 +34,7 @@ namespace Byndyusoft.Example.Controllers
         [HttpPost("SaveOld")]
         [RequestSizeLimit(int.MaxValue)]
         [RequestFormLimits(MultipartBodyLengthLimit = int.MaxValue)]
-        public async Task<ActionResult<ResultDto>> SaveOldWay([FromForm] IFormFile file, CancellationToken cancellationToken)
+        public async Task<ActionResult<FileResultDto>> SaveOldWay([FromForm] IFormFile file, CancellationToken cancellationToken)
         {
             var stopwatch = Stopwatch.StartNew();
 
@@ -51,15 +51,11 @@ namespace Byndyusoft.Example.Controllers
         [RequestSizeLimit(int.MaxValue)]
         [RequestFormLimits(MultipartBodyLengthLimit = int.MaxValue)]
         [DisableFormValueModelBinding]
-        public async Task<ActionResult<ResultDto>> SaveNewWay(CancellationToken cancellationToken)
+        public async Task<ActionResult<FileResultDto>> SaveNewWay(CancellationToken cancellationToken)
         {
             var stopwatch = Stopwatch.StartNew();
 
-            var fileDtoResult = await _multipartFormDataFileProvider.GetAsync(Request, cancellationToken);
-            if (fileDtoResult.IsError())
-                return fileDtoResult.AsSimple().ToActionResult();
-
-            var dto = fileDtoResult.Result;
+            var dto = await _multipartFormDataFileProvider.GetAsync(Request, cancellationToken);
             var filePath = await _fileService.SaveFileAsync(dto.Stream, dto.FileName, cancellationToken);
 
             stopwatch.Stop();
@@ -72,12 +68,12 @@ namespace Byndyusoft.Example.Controllers
         [RequestSizeLimit(int.MaxValue)]
         [RequestFormLimits(MultipartBodyLengthLimit = int.MaxValue)]
         [DisableFormValueModelBinding]
-        public async Task<ActionResult<ResultDto[]>> SaveNewMultiple(CancellationToken cancellationToken)
+        public async Task<ActionResult<FileResultDto[]>> SaveNewMultiple(CancellationToken cancellationToken)
         {
             var stopwatch = Stopwatch.StartNew();
 
-            var resultDtos = new List<ResultDto>();
-            var fileDtos = _multipartFormDataFileProvider.EnumerateAsync(Request, cancellationToken);
+            var resultDtos = new List<FileResultDto>();
+            var fileDtos = await _multipartFormDataFileProvider.EnumerateAsync(Request, cancellationToken);
 
             await foreach (var dto in fileDtos.WithCancellation(cancellationToken))
             {
@@ -89,6 +85,29 @@ namespace Byndyusoft.Example.Controllers
             _logger.LogInformation("{OperationName} took {Elapsed}", nameof(SaveNewMultiple), stopwatch.Elapsed);
 
             return resultDtos.ToArray();
+        }
+
+        [HttpPost("SaveFormData")]
+        [RequestSizeLimit(int.MaxValue)]
+        [RequestFormLimits(MultipartBodyLengthLimit = int.MaxValue)]
+        [DisableFormValueModelBinding]
+        public async Task<ActionResult<FormDataResultDto>> SaveFormData(CancellationToken cancellationToken)
+        {
+            var stopwatch = Stopwatch.StartNew();
+
+            var resultDtos = new List<FileResultDto>();
+            var formDataDto = await _multipartFormDataFileProvider.GetFormDataAsync(Request, cancellationToken);
+
+            await foreach (var dto in formDataDto.Files.WithCancellation(cancellationToken))
+            {
+                var filePath = await _fileService.SaveFileAsync(dto.Stream, dto.FileName, cancellationToken);
+                resultDtos.Add(ResultDtoMapper.MapFrom(dto, filePath));
+            }
+
+            stopwatch.Stop();
+            _logger.LogInformation("{OperationName} took {Elapsed}", nameof(SaveFormData), stopwatch.Elapsed);
+
+            return FormDataResultDtoMapper.MapFrom(formDataDto, resultDtos.ToArray());
         }
     }
 }

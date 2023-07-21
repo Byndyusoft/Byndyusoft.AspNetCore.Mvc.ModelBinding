@@ -1,6 +1,6 @@
 ﻿namespace Byndyusoft.Example.Dtos
 {
-    public class ResultDto
+    public class FileResultDto
     {
         public string Name { get; set; } = default!;
 

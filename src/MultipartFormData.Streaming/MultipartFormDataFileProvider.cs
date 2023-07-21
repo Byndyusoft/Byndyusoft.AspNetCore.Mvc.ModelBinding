@@ -5,88 +5,128 @@ using Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Interfa
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.WebUtilities;
-using Byndyusoft.ModelResult.ModelResults;
 using System.Diagnostics.CodeAnalysis;
 using System;
 using System.Collections.Generic;
 using Microsoft.Net.Http.Headers;
-using System.IO;
-using System.Reflection.PortableExecutable;
 using System.Runtime.CompilerServices;
+using Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Dtos;
 
 namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming
 {
     public sealed class MultipartFormDataFileProvider : IMultipartFormDataFileProvider
     {
-        public async Task<ModelResult<MultipartFormDataFileDto>> GetAsync(HttpRequest request, CancellationToken cancellationToken)
+        public async Task<MultipartFormDataFileDto> GetAsync(HttpRequest request,
+            CancellationToken cancellationToken)
         {
-            MediaTypeHeaderValue.TryParse(request.ContentType, out var contentType);
-            if (HasMultipartFormContentType(contentType) == false)
-                return MultipartFormDataFileProviderErrors.FromMessage("Content type is not multipart form data");
+            EnsureRequestIsMultipartFormData(request);
 
             var boundary = request.GetMultipartBoundary();
             var reader = new MultipartReader(boundary, request.Body);
 
             var section = await reader.ReadNextSectionAsync(cancellationToken);
 
-            while (section is not null)
-            {
-                var multipartFormDataFileDtoResult = GetMultipartFormDataFileDto(section);
-                if (multipartFormDataFileDtoResult.IsError())
-                    return multipartFormDataFileDtoResult.AsSimple();
+            var contentDisposition = GetContentDisposition(section);
 
-                var multipartFormDataFileDto = multipartFormDataFileDtoResult.Result;
-                if (multipartFormDataFileDto is not null)
-                    return multipartFormDataFileDto;
+            if (contentDisposition.IsFileDisposition() == false)
+                throw new InvalidOperationException("Ожидалась только секция с файлом");
 
-                section = await reader.ReadNextSectionAsync(cancellationToken);
-            }
+            var multipartFormDataFileDto = GetMultipartFormDataFileDto(section, contentDisposition);
 
-            return MultipartFormDataFileProviderErrors.FromMessage("Контент файла не найден");
+            section = await reader.ReadNextSectionAsync(cancellationToken);
+            if (section is not null)
+                throw new InvalidOperationException("Ожидалась только одна секция формы");
+
+            return multipartFormDataFileDto;
         }
 
-        public IAsyncEnumerable<MultipartFormDataFileDto> EnumerateAsync(
+        public async Task<IAsyncEnumerable<MultipartFormDataFileDto>> EnumerateAsync(
             HttpRequest request,
             CancellationToken cancellationToken)
         {
-            MediaTypeHeaderValue.TryParse(request.ContentType, out var contentType);
-            if (HasMultipartFormContentType(contentType) == false)
-                throw new InvalidOperationException("Content type is not multipart form data");
+            EnsureRequestIsMultipartFormData(request);
 
             var boundary = request.GetMultipartBoundary();
             var reader = new MultipartReader(boundary, request.Body);
 
-            return EnumerateAsync(reader, cancellationToken);
+            var section = await reader.ReadNextSectionAsync(cancellationToken);
+
+            return EnumerateFilesAsync(reader, section, cancellationToken);
         }
 
-        private async IAsyncEnumerable<MultipartFormDataFileDto> EnumerateAsync(
+        public async Task<MultipartFormDataDto> GetFormDataAsync(
+            HttpRequest request,
+            CancellationToken cancellationToken)
+        {
+            EnsureRequestIsMultipartFormData(request);
+
+            var boundary = request.GetMultipartBoundary();
+            var reader = new MultipartReader(boundary, request.Body);
+
+            var section = await reader.ReadNextSectionAsync(cancellationToken);
+
+            var formAccumulator = new KeyValueAccumulator();
+            while (section is not null)
+            {
+                var contentDisposition = GetContentDisposition(section);
+
+                if (contentDisposition.IsFormDisposition() == false)
+                    break;
+
+                var formDataSection = new FormMultipartSection(section, contentDisposition);
+
+                var key = formDataSection.Name;
+                var value = await formDataSection.GetValueAsync();
+                formAccumulator.Append(key, value);
+
+                section = await reader.ReadNextSectionAsync(cancellationToken);
+            }
+
+            var files = EnumerateFilesAsync(reader, section, cancellationToken);
+            var multipartFormDataDto = new MultipartFormDataDto(formAccumulator.GetResults(), files);
+
+            return multipartFormDataDto;
+        }
+
+        private static ContentDispositionHeaderValue GetContentDisposition(MultipartSection section)
+        {
+            if (ContentDispositionHeaderValue.TryParse(section.ContentDisposition, out var contentDisposition) == false)
+                throw new InvalidOperationException("Header Content-Disposition не найден");
+            return contentDisposition;
+        }
+
+        private static void EnsureRequestIsMultipartFormData(HttpRequest request)
+        {
+            MediaTypeHeaderValue.TryParse(request.ContentType, out var contentType);
+            if (HasMultipartFormContentType(contentType) == false)
+                throw new InvalidOperationException("Content type is not multipart form data");
+        }
+
+        private async IAsyncEnumerable<MultipartFormDataFileDto> EnumerateFilesAsync(
             MultipartReader multipartReader,
+            MultipartSection? currentSection,
             [EnumeratorCancellation] CancellationToken cancellationToken)
         {
-            var section = await multipartReader.ReadNextSectionAsync(cancellationToken);
+            var section = currentSection;
 
             while (section is not null)
             {
-                var multipartFormDataFileDtoResult = GetMultipartFormDataFileDto(section);
-                if (multipartFormDataFileDtoResult.IsError())
-                    throw new InvalidOperationException(multipartFormDataFileDtoResult.AsError().Message);
+                var contentDisposition = GetContentDisposition(section);
 
-                var multipartFormDataFileDto = multipartFormDataFileDtoResult.Result;
-                if (multipartFormDataFileDto is not null)
-                    yield return multipartFormDataFileDto;
+                if (contentDisposition.IsFileDisposition() == false)
+                    throw new InvalidOperationException("Ожидались только секции с файлами");
+
+                var multipartFormDataFileDto = GetMultipartFormDataFileDto(section, contentDisposition);
+                yield return multipartFormDataFileDto;
 
                 section = await multipartReader.ReadNextSectionAsync(cancellationToken);
             }
         }
 
-        private ModelResult<MultipartFormDataFileDto?> GetMultipartFormDataFileDto(MultipartSection section)
+        private MultipartFormDataFileDto GetMultipartFormDataFileDto(
+            MultipartSection section,
+            ContentDispositionHeaderValue contentDisposition)
         {
-            if (ContentDispositionHeaderValue.TryParse(section.ContentDisposition, out var contentDisposition) == false)
-                return MultipartFormDataFileProviderErrors.FromMessage("Header Content-Disposition не найден");
-
-            if (contentDisposition.IsFileDisposition() == false)
-                return (MultipartFormDataFileDto?)null;
-
             var fileSection = new FileMultipartSection(section, contentDisposition);
 
             var name = fileSection.Name;
