@@ -6,9 +6,9 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Dto
     /// <summary>
     ///     Данные из multipart form data
     /// </summary>
-    public class MultipartFormDataCollection
+    public class FormStreamedDataCollection
     {
-        public MultipartFormDataCollection(Dictionary<string, StringValues> fields,
+        public FormStreamedDataCollection(Dictionary<string, StringValues> fields,
             IAsyncEnumerable<MultipartFormDataFileDto> files)
         {
             Fields = fields;

@@ -1,90 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Resources;
-using System.Threading;
-using System.Threading.Tasks;
 using Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Dtos;
-using Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Interfaces;
-using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.Primitives;
 
-namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming
+namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Binders
 {
-    /// <summary>
-    ///     Провайдер значений для извлечения данных из формы со стримами
-    /// </summary>
-    public class FormDataValueProviderFactory : IValueProviderFactory
-    {
-        private readonly IMultipartFormDataFileProvider _multipartFormDataFileProvider;
-
-        public FormDataValueProviderFactory(IMultipartFormDataFileProvider multipartFormDataFileProvider)
-        {
-            _multipartFormDataFileProvider = multipartFormDataFileProvider;
-        }
-
-        /// <inheritdoc />
-        public Task CreateValueProviderAsync(ValueProviderFactoryContext context)
-        {
-            var request = context.ActionContext.HttpContext.Request;
-            if (request.HasFormContentType)
-            {
-                // Allocating a Task only when the body is form data.
-                return AddValueProviderAsync(context);
-            }
-
-            return Task.CompletedTask;
-        }
-
-        private async Task AddValueProviderAsync(ValueProviderFactoryContext context)
-        {
-            var request = context.ActionContext.HttpContext.Request;
-
-            MultipartFormDataCollection multipartFormDataCollection;
-            try
-            {
-                multipartFormDataCollection = await _multipartFormDataFileProvider.GetFormDataAsync(request, CancellationToken.None);
-            }
-            catch (InvalidDataException ex)
-            {
-                // ReadFormAsync can throw InvalidDataException if the form content is malformed.
-                // Wrap it in a ValueProviderException that the CompositeValueProvider special cases.
-                throw new ValueProviderException($"Ошибка считывания данных формы: {ex.Message}", ex);
-            }
-            catch (IOException ex)
-            {
-                // ReadFormAsync can throw IOException if the client disconnects.
-                // Wrap it in a ValueProviderException that the CompositeValueProvider special cases.
-                throw new ValueProviderException($"Ошибка считывания данных формы: {ex.Message}", ex);
-            }
-
-            var valueProvider = new FormDataValueProvider(
-                FromDataBindingSource.Instance,
-                multipartFormDataCollection,
-                CultureInfo.CurrentCulture);
-
-            context.ValueProviders.Add(valueProvider);
-        }
-    }
-
-    public static class FromDataBindingSource
-    {
-        public static readonly BindingSource Instance = new BindingSource(
-            "FormData",
-            "FormData",
-            isGreedy: true,
-            isFromRequest: true);
-    }
-
     public sealed class FormDataValueProvider : BindingSourceValueProvider, IEnumerableValueProvider
     {
         public const string CultureInvariantFieldName = "__Invariant";
         public const string FilesFieldName = "Files";
 
-        private readonly MultipartFormDataCollection _values;
+        private readonly FormStreamedDataCollection _values;
         private readonly HashSet<string?>? _invariantValueKeys;
         private PrefixContainer? _prefixContainer;
 
@@ -96,7 +26,7 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming
         /// <param name="culture">The culture to return with ValueProviderResult instances.</param>
         public FormDataValueProvider(
             BindingSource bindingSource,
-            MultipartFormDataCollection values,
+            FormStreamedDataCollection values,
             CultureInfo? culture)
             : base(bindingSource)
         {
@@ -163,7 +93,9 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming
                 return ValueProviderResult.None;
             }
 
-            var values = _values.Fields[key];
+            if (_values.Fields.TryGetValue(key, out var values) == false)
+                values = StringValues.Empty;
+
             if (values.Count == 0)
             {
                 return ValueProviderResult.None;

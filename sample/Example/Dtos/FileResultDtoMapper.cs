@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Byndyusoft.Example.Dtos
 {
-    public static class ResultDtoMapper
+    public static class FileResultDtoMapper
     {
         public static FileResultDto MapFrom(MultipartFormDataFileDto multipartFormDataFileDto, string filePath)
         {

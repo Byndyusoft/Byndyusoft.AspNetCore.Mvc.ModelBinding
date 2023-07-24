@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.WebUtilities;
@@ -14,50 +13,16 @@ using Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Dtos;
 
 namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming
 {
-    public sealed class MultipartFormDataFileProvider : IMultipartFormDataFileProvider
+    public static class FormStreamedDataExtensions
     {
-        public async Task<MultipartFormDataFileDto> GetAsync(HttpRequest request,
-            CancellationToken cancellationToken)
+        public static async Task<FormStreamedDataCollection> ReadFormStreamedDataAsync(
+            this HttpRequest request,
+            CancellationToken cancellationToken = default)
         {
-            EnsureRequestIsMultipartFormData(request);
+            var httpContextKey = "Byndyusoft.FormData.Stream";
+            if (request.HttpContext.Items.TryGetValue(httpContextKey, out var dtoObject) && dtoObject is FormStreamedDataCollection multipartFormDataDto)
+                return multipartFormDataDto;
 
-            var boundary = request.GetMultipartBoundary();
-            var reader = new MultipartReader(boundary, request.Body);
-
-            var section = await reader.ReadNextSectionAsync(cancellationToken);
-
-            var contentDisposition = GetContentDisposition(section);
-
-            if (contentDisposition.IsFileDisposition() == false)
-                throw new InvalidOperationException("Ожидалась только секция с файлом");
-
-            var multipartFormDataFileDto = GetMultipartFormDataFileDto(section, contentDisposition);
-
-            section = await reader.ReadNextSectionAsync(cancellationToken);
-            if (section is not null)
-                throw new InvalidOperationException("Ожидалась только одна секция формы");
-
-            return multipartFormDataFileDto;
-        }
-
-        public async Task<IAsyncEnumerable<MultipartFormDataFileDto>> EnumerateAsync(
-            HttpRequest request,
-            CancellationToken cancellationToken)
-        {
-            EnsureRequestIsMultipartFormData(request);
-
-            var boundary = request.GetMultipartBoundary();
-            var reader = new MultipartReader(boundary, request.Body);
-
-            var section = await reader.ReadNextSectionAsync(cancellationToken);
-
-            return EnumerateFilesAsync(reader, section, cancellationToken);
-        }
-
-        public async Task<Dtos.MultipartFormDataCollection> GetFormDataAsync(
-            HttpRequest request,
-            CancellationToken cancellationToken)
-        {
             EnsureRequestIsMultipartFormData(request);
 
             var boundary = request.GetMultipartBoundary();
@@ -83,16 +48,11 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming
             }
 
             var files = EnumerateFilesAsync(reader, section, cancellationToken);
-            var multipartFormDataDto = new Dtos.MultipartFormDataCollection(formAccumulator.GetResults(), files);
+            multipartFormDataDto = new FormStreamedDataCollection(formAccumulator.GetResults(), files);
+
+            request.HttpContext.Items[httpContextKey] = multipartFormDataDto;
 
             return multipartFormDataDto;
-        }
-
-        private static ContentDispositionHeaderValue GetContentDisposition(MultipartSection section)
-        {
-            if (ContentDispositionHeaderValue.TryParse(section.ContentDisposition, out var contentDisposition) == false)
-                throw new InvalidOperationException("Header Content-Disposition не найден");
-            return contentDisposition;
         }
 
         private static void EnsureRequestIsMultipartFormData(HttpRequest request)
@@ -102,7 +62,20 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming
                 throw new InvalidOperationException("Content type is not multipart form data");
         }
 
-        private async IAsyncEnumerable<MultipartFormDataFileDto> EnumerateFilesAsync(
+        private static bool HasMultipartFormContentType([NotNullWhen(true)] MediaTypeHeaderValue? contentType)
+        {
+            // Content-Type: multipart/form-data; boundary=----WebKitFormBoundarymx2fSWqWSd0OxQqq
+            return contentType != null && contentType.MediaType.Equals("multipart/form-data", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static ContentDispositionHeaderValue GetContentDisposition(MultipartSection section)
+        {
+            if (ContentDispositionHeaderValue.TryParse(section.ContentDisposition, out var contentDisposition) == false)
+                throw new InvalidOperationException("Header Content-Disposition не найден");
+            return contentDisposition;
+        }
+
+        private static async IAsyncEnumerable<MultipartFormDataFileDto> EnumerateFilesAsync(
             MultipartReader multipartReader,
             MultipartSection? currentSection,
             [EnumeratorCancellation] CancellationToken cancellationToken)
@@ -123,7 +96,7 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming
             }
         }
 
-        private MultipartFormDataFileDto GetMultipartFormDataFileDto(
+        private static MultipartFormDataFileDto GetMultipartFormDataFileDto(
             MultipartSection section,
             ContentDispositionHeaderValue contentDisposition)
         {
@@ -143,7 +116,7 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming
             };
         }
 
-        private long? GetContentLength(MultipartSection multipartSection)
+        private static long? GetContentLength(MultipartSection multipartSection)
         {
             var contentLengthHeader = GetHeaderSingleValue(multipartSection, "Content-Length");
             if (string.IsNullOrEmpty(contentLengthHeader))
@@ -155,18 +128,12 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming
             return contentLength;
         }
 
-        private string? GetHeaderSingleValue(MultipartSection section, string headerName)
+        private static string? GetHeaderSingleValue(MultipartSection section, string headerName)
         {
             if (section.Headers.TryGetValue(headerName, out var headerStringValues) == false)
                 return null;
 
             return headerStringValues.SingleOrDefault();
-        }
-
-        private static bool HasMultipartFormContentType([NotNullWhen(true)] MediaTypeHeaderValue? contentType)
-        {
-            // Content-Type: multipart/form-data; boundary=----WebKitFormBoundarymx2fSWqWSd0OxQqq
-            return contentType != null && contentType.MediaType.Equals("multipart/form-data", StringComparison.OrdinalIgnoreCase);
         }
     }
 }

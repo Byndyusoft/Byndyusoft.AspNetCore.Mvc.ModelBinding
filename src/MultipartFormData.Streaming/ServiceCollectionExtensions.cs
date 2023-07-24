@@ -1,5 +1,4 @@
-﻿using Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming;
-using Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Interfaces;
+﻿
 
 // ReSharper disable CheckNamespace
 
@@ -12,7 +11,6 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         public static IServiceCollection AddMultipartFormDataFileProvider(this IServiceCollection services)
         {
-            services.AddSingleton<IMultipartFormDataFileProvider, MultipartFormDataFileProvider>();
             return services;
         }
     }
