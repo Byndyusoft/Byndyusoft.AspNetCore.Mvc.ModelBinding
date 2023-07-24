@@ -26,7 +26,7 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Bin
             var value = new StreamFormFileCollection(files);
 
             // We need to add a ValidationState entry because the modelName might be non-standard. Otherwise
-            //// the entry we create in model state might not be marked as valid.
+            // the entry we create in model state might not be marked as valid.
             bindingContext.ValidationState.Add(value, new ValidationStateEntry()
             {
                 Key = modelName,
@@ -40,7 +40,7 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Bin
             bindingContext.Result = ModelBindingResult.Success(value);
         }
 
-        private async Task<IAsyncEnumerable<MultipartFormDataFileDto>> GetFormFilesAsync(ModelBindingContext bindingContext)
+        private async Task<IAsyncEnumerable<IFormStreamedFile>> GetFormFilesAsync(ModelBindingContext bindingContext)
         {
             var request = bindingContext.HttpContext.Request;
             var multipartFormDataCollection = await request.ReadFormStreamedDataAsync();

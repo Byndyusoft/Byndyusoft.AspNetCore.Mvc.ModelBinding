@@ -5,13 +5,13 @@ namespace Byndyusoft.Example.Dtos
 {
     public static class FileResultDtoMapper
     {
-        public static FileResultDto MapFrom(MultipartFormDataFileDto multipartFormDataFileDto, string filePath)
+        public static FileResultDto MapFrom(IFormStreamedFile formStreamedFile, string filePath)
         {
             return new FileResultDto
             {
-                Name = multipartFormDataFileDto.Name,
-                FileName = multipartFormDataFileDto.FileName,
-                ContentLength = multipartFormDataFileDto.ContentLength,
+                Name = formStreamedFile.Name,
+                FileName = formStreamedFile.FileName,
+                ContentLength = formStreamedFile.ContentLength,
                 FilePath = filePath
             };
         }

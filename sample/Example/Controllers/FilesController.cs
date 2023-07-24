@@ -58,10 +58,11 @@ namespace Byndyusoft.Example.Controllers
 
             var resultDtos = new List<FileResultDto>();
 
-            await foreach (var dto in requestDto.Files.WithCancellation(cancellationToken))
+            await foreach (var file in requestDto.Files.WithCancellation(cancellationToken))
             {
-                var filePath = await _fileService.SaveFileAsync(dto.Stream, dto.FileName, cancellationToken);
-                resultDtos.Add(FileResultDtoMapper.MapFrom(dto, filePath));
+                await using var stream = file.OpenReadStream();
+                var filePath = await _fileService.SaveFileAsync(stream, file.FileName, cancellationToken);
+                resultDtos.Add(FileResultDtoMapper.MapFrom(file, filePath));
             }
 
             stopwatch.Stop();

@@ -8,8 +8,9 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Dto
     /// </summary>
     public class FormStreamedDataCollection
     {
-        public FormStreamedDataCollection(Dictionary<string, StringValues> fields,
-            IAsyncEnumerable<MultipartFormDataFileDto> files)
+        public FormStreamedDataCollection(
+            IDictionary<string, StringValues> fields,
+            IAsyncEnumerable<IFormStreamedFile> files)
         {
             Fields = fields;
             Files = files;
@@ -18,11 +19,11 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Dto
         /// <summary>
         ///     Список полей, которые не являются файлами
         /// </summary>
-        public Dictionary<string, StringValues> Fields { get; }
+        public IDictionary<string, StringValues> Fields { get; }
 
         /// <summary>
         ///     Перечисление файлов со стримами
         /// </summary>
-        public IAsyncEnumerable<MultipartFormDataFileDto> Files { get; }
+        public IAsyncEnumerable<IFormStreamedFile> Files { get; }
     }
 }

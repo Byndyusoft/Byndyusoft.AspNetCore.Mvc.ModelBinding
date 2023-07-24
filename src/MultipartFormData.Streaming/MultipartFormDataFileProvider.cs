@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -19,6 +18,7 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming
             this HttpRequest request,
             CancellationToken cancellationToken = default)
         {
+            // TODO Вынести
             var httpContextKey = "Byndyusoft.FormData.Stream";
             if (request.HttpContext.Items.TryGetValue(httpContextKey, out var dtoObject) && dtoObject is FormStreamedDataCollection multipartFormDataDto)
                 return multipartFormDataDto;
@@ -75,7 +75,7 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming
             return contentDisposition;
         }
 
-        private static async IAsyncEnumerable<MultipartFormDataFileDto> EnumerateFilesAsync(
+        private static async IAsyncEnumerable<IFormStreamedFile> EnumerateFilesAsync(
             MultipartReader multipartReader,
             MultipartSection? currentSection,
             [EnumeratorCancellation] CancellationToken cancellationToken)
@@ -96,7 +96,7 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming
             }
         }
 
-        private static MultipartFormDataFileDto GetMultipartFormDataFileDto(
+        private static IFormStreamedFile GetMultipartFormDataFileDto(
             MultipartSection section,
             ContentDispositionHeaderValue contentDisposition)
         {
@@ -104,36 +104,9 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming
 
             var name = fileSection.Name;
             var fileName = fileSection.FileName;
+            var headers = new HeaderDictionary(section.Headers);
 
-            var contentLength = GetContentLength(section);
-
-            return new MultipartFormDataFileDto
-            {
-                Stream = fileSection.FileStream,
-                Name = name,
-                FileName = fileName,
-                ContentLength = contentLength
-            };
-        }
-
-        private static long? GetContentLength(MultipartSection multipartSection)
-        {
-            var contentLengthHeader = GetHeaderSingleValue(multipartSection, "Content-Length");
-            if (string.IsNullOrEmpty(contentLengthHeader))
-                return null;
-
-            if (long.TryParse(contentLengthHeader, out var contentLength) == false)
-                return null;
-
-            return contentLength;
-        }
-
-        private static string? GetHeaderSingleValue(MultipartSection section, string headerName)
-        {
-            if (section.Headers.TryGetValue(headerName, out var headerStringValues) == false)
-                return null;
-
-            return headerStringValues.SingleOrDefault();
+            return new FormStreamedFile(fileSection.FileStream, name, fileName, headers);
         }
     }
 }
