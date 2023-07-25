@@ -2,12 +2,15 @@
 
 namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Binders
 {
+    /// <summary>
+    ///     <see cref="BindingSource" /> для считывания данных из формы form-data без считывания стримов файлов.
+    /// </summary>
     public static class FromStreamedDataBindingSource
     {
         public static readonly BindingSource Instance = new(
             "FromStreamedData",
             "FromStreamedData",
-            isGreedy: false,
-            isFromRequest: true);
+            false,
+            true);
     }
 }

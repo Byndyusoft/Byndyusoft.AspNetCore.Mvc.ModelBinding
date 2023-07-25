@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Binders
 {
     /// <summary>
-    /// Specifies that a parameter or property should be bound using form-data in the request body.
+    ///     Обозначает, что параметр или свойство должно быть привязано к полю из form-data в теле запроса.
+    ///     Стримы файлов считываются пользователем после биндинга данных.
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Property)]
     public class FromFormStreamedDataAttribute : Attribute, IBindingSourceMetadata, IModelNameProvider

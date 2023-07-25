@@ -1,29 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Values;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.Extensions.Primitives;
 
 namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Binders
 {
+    /// <summary>
+    ///     Провайдер извлеченных данных из формы (multipart form data) без считывания стримов файлов
+    /// </summary>
     public sealed class FormStreamedDataValueProvider : BindingSourceValueProvider, IEnumerableValueProvider
     {
         public const string CultureInvariantFieldName = "__Invariant";
-        public const string FilesFieldName = "Files";
+        private readonly HashSet<string?>? _invariantValueKeys;
 
         private readonly FormStreamedDataCollection _values;
-        private readonly HashSet<string?>? _invariantValueKeys;
         private PrefixContainer? _prefixContainer;
 
         /// <summary>
-        /// Creates a value provider for <see cref="IFormCollection"/>.
+        ///     Конструктор провайдера для данных типа <see cref="FormStreamedDataCollection" />.
         /// </summary>
-        /// <param name="bindingSource">The <see cref="BindingSource"/> for the data.</param>
-        /// <param name="values">The key value pairs to wrap.</param>
-        /// <param name="culture">The culture to return with ValueProviderResult instances.</param>
+        /// <param name="bindingSource"><see cref="BindingSource" /> данных.</param>
+        /// <param name="values">Обернутые значения формы без считывания стримов.</param>
+        /// <param name="culture">Локаль для возврата результатов.</param>
         public FormStreamedDataValueProvider(
             BindingSource bindingSource,
             FormStreamedDataCollection values,
@@ -36,33 +35,30 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Binders
             _values = values ?? throw new ArgumentNullException(nameof(values));
 
             if (_values.Fields.TryGetValue(CultureInvariantFieldName, out var invariantKeys) && invariantKeys.Count > 0)
-            {
-                _invariantValueKeys = new(invariantKeys, StringComparer.OrdinalIgnoreCase);
-            }
+                _invariantValueKeys = new HashSet<string?>(invariantKeys, StringComparer.OrdinalIgnoreCase);
 
             Culture = culture;
         }
 
         /// <summary>
-        /// The culture to use.
+        ///     Локаль для возврата результатов.
         /// </summary>
         public CultureInfo? Culture { get; }
 
         /// <summary>
-        /// The prefix container.
+        ///     Коллекция префиксов.
         /// </summary>
         private PrefixContainer PrefixContainer
         {
-            get
-            {
-                var keyCollection = _values.Fields.Keys.Concat(new[] { FilesFieldName }).ToArray();
-                return _prefixContainer ??= new PrefixContainer(keyCollection);
-            }
+            get { return _prefixContainer ??= new PrefixContainer(_values.Fields.Keys); }
         }
 
         /// <inheritdoc />
         public override bool ContainsPrefix(string prefix)
         {
+            if (string.IsNullOrEmpty(prefix))
+                throw new ArgumentNullException(nameof(prefix));
+
             return PrefixContainer.ContainsPrefix(prefix);
         }
 
@@ -81,25 +77,18 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Binders
             if (string.IsNullOrEmpty(key))
                 throw new ArgumentNullException(nameof(key));
 
-            if (key.Equals(FilesFieldName))
-                return ValueProviderResult.None;
-
             if (key.Length == 0)
-            {
                 // Top level parameters will fall back to an empty prefix when the parameter name does not
                 // appear in any value provider. This would result in the parameter binding to a form parameter
                 // with a empty key (e.g. Request body looks like "=test") which isn't a scenario we want to support.
                 // Return a "None" result in this event.
                 return ValueProviderResult.None;
-            }
 
             if (_values.Fields.TryGetValue(key, out var values) == false)
-                values = StringValues.Empty;
+                return ValueProviderResult.None;
 
             if (values.Count == 0)
-            {
                 return ValueProviderResult.None;
-            }
 
             var culture = _invariantValueKeys?.Contains(key) == true ? CultureInfo.InvariantCulture : Culture;
             return new ValueProviderResult(values, culture);

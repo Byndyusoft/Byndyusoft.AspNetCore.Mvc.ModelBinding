@@ -2,14 +2,14 @@
 using System.Threading.Tasks;
 using Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Extensions;
 using Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Values;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Binders
 {
     /// <summary>
-    /// <see cref="IModelBinder"/> implementation to bind posted files to <see cref="IFormFile"/>.
+    ///     Класс для связывания данных типа <see cref="FormStreamedFileCollection" />.
+    ///     По сути возвращает перечисление для считывания стримов файлов.
     /// </summary>
     public class FormStreamedFileModelBinder : IModelBinder
     {
@@ -28,15 +28,15 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Binders
 
             // We need to add a ValidationState entry because the modelName might be non-standard. Otherwise
             // the entry we create in model state might not be marked as valid.
-            bindingContext.ValidationState.Add(value, new ValidationStateEntry()
+            bindingContext.ValidationState.Add(value, new ValidationStateEntry
             {
-                Key = modelName,
+                Key = modelName
             });
 
             bindingContext.ModelState.SetModelValue(
                 modelName,
-                rawValue: null,
-                attemptedValue: null);
+                null,
+                null);
 
             bindingContext.Result = ModelBindingResult.Success(value);
         }

@@ -4,7 +4,7 @@ using Microsoft.Extensions.Primitives;
 namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Values
 {
     /// <summary>
-    ///     Данные из multipart form data
+    ///     Строковые данные из multipart form data и файлы, стримы которых еще не считаны
     /// </summary>
     public class FormStreamedDataCollection
     {
@@ -22,7 +22,7 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Values
         public IDictionary<string, StringValues> Fields { get; }
 
         /// <summary>
-        ///     Перечисление файлов со стримами
+        ///     Перечисление файлов с не считанными стримами
         /// </summary>
         public IAsyncEnumerable<IFormStreamedFile> Files { get; }
     }

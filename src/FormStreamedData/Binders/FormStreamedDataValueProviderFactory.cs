@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Binders
 {
     /// <summary>
-    ///     Провайдер значений для извлечения данных из формы со стримами
+    ///     Фабрика провайдера извлеченных данных из формы (multipart form data) без считывания стримов файлов
     /// </summary>
     public class FormStreamedDataValueProviderFactory : IValueProviderFactory
     {
@@ -16,11 +16,10 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Binders
         public Task CreateValueProviderAsync(ValueProviderFactoryContext context)
         {
             var request = context.ActionContext.HttpContext.Request;
+
+            // Allocating a Task only when the body is form data.
             if (request.HasFormContentType)
-            {
-                // Allocating a Task only when the body is form data.
                 return AddValueProviderAsync(context);
-            }
 
             return Task.CompletedTask;
         }
@@ -29,7 +28,7 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Binders
             ValueProviderFactoryContext context)
         {
             var request = context.ActionContext.HttpContext.Request;
-            
+
             FormStreamedDataCollection formStreamedDataCollection;
             try
             {

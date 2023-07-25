@@ -1,17 +1,20 @@
-﻿
+﻿// ReSharper disable CheckNamespace
 
-// ReSharper disable CheckNamespace
+using Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Binders;
+using Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Values;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class ServicesCollectionExtensions
+    public static class MvcOptionsExtensions
     {
         /// <summary>
-        ///     Добавляет в зависимости службу вычитки контента из multi part form data
+        ///     Регистрация класса для биндинга <see cref="FormStreamedFileCollection" />
         /// </summary>
-        public static IServiceCollection AddMultipartFormDataFileProvider(this IServiceCollection services)
+        public static MvcOptions AddFormStreamedFileCollectionBinder(this MvcOptions mvcOptions)
         {
-            return services;
+            mvcOptions.ModelBinderProviders.Insert(0, new FormStreamedFileModelBinderProvider());
+            return mvcOptions;
         }
     }
 }

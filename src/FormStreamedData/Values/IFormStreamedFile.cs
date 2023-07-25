@@ -5,7 +5,7 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Values
     public interface IFormStreamedFile : IFormFile
     {
         /// <summary>
-        /// Gets the Content-Length header value of the uploaded file.
+        ///     Возвращает численное значение Content-Length секции файла, если есть
         /// </summary>
         long? ContentLength { get; }
     }

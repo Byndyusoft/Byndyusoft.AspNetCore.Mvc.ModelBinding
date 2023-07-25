@@ -6,7 +6,8 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Attributes
 {
     /// <summary>
-    ///     Атрибут для замены стандартной фабрики данных multipart from data на <see cref="FormStreamedDataValueProviderFactory"/>>
+    ///     Атрибут для замены стандартной фабрики данных multipart from data на
+    ///     <see cref="FormStreamedDataValueProviderFactory" />>
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class SetFormStreamedDataValueProviderAttribute : Attribute, IResourceFilter

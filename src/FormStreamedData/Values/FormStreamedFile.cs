@@ -7,9 +7,12 @@ using Microsoft.Net.Http.Headers;
 
 namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Values
 {
+    /// <summary>
+    ///     Информация о файле из form-data, стримы которых считываются пользователем после биндинга.
+    /// </summary>
     public class FormStreamedFile : IFormStreamedFile
     {
-        // Stream.CopyTo method uses 80KB as the default buffer size.
+        // Метод Stream.CopyTo использует 80KB в качестве размера буфера по умолчанию.
         private const int DefaultBufferSize = 80 * 1024;
 
         private readonly Stream _stream;
@@ -23,19 +26,19 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Values
         }
 
         /// <summary>
-        /// Gets the raw Content-Disposition header of the uploaded file.
+        ///     Возвращает заголовок Content-Disposition секции файла.
         /// </summary>
         public string ContentDisposition => Headers[HeaderNames.ContentDisposition];
 
         /// <summary>
-        /// Gets the Content-Length header value of the uploaded file.
+        ///     Возвращает численное значение Content-Length секции файла, если есть
         /// </summary>
         public long? ContentLength
         {
             get
             {
                 var contentLengthHeader = (string)Headers[HeaderNames.ContentLength];
-                if (string.IsNullOrEmpty(contentLengthHeader) == false 
+                if (string.IsNullOrEmpty(contentLengthHeader) == false
                     && long.TryParse(contentLengthHeader, out var contentLength))
                     return contentLength;
 
@@ -44,32 +47,32 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Values
         }
 
         /// <summary>
-        /// Gets the raw Content-Type header of the uploaded file.
+        ///     Возвращает заголовок Content-Type секции файла.
         /// </summary>
         public string ContentType => Headers[HeaderNames.ContentType];
 
         /// <summary>
-        /// Gets the header dictionary of the uploaded file.
+        ///     Словарь заголовков секции файла.
         /// </summary>
         public IHeaderDictionary Headers { get; }
 
         /// <summary>
-        /// Gets the file length in bytes.
+        ///     Не реализовано в этой реализации, т.к. длина файла неизвестна.
         /// </summary>
         public long Length => throw new NotImplementedException("Length is not known because of stream");
 
         /// <summary>
-        /// Gets the name from the Content-Disposition header.
+        ///     Возвращает имя из заголовка Content-Disposition секции файла.
         /// </summary>
         public string Name { get; }
 
         /// <summary>
-        /// Gets the file name from the Content-Disposition header.
+        ///     Возвращает имя файла из заголовка Content-Disposition секции файла.
         /// </summary>
         public string FileName { get; }
 
         /// <summary>
-        /// Opens the request stream for reading the uploaded file.
+        ///     Возвращает стрим файла, который можно считать только один раз.
         /// </summary>
         public Stream OpenReadStream()
         {
@@ -77,31 +80,25 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Values
         }
 
         /// <summary>
-        /// Copies the contents of the uploaded file to the <paramref name="target"/> stream.
+        ///     Копирует содержимое файла в стрим <paramref name="target" />.
         /// </summary>
-        /// <param name="target">The stream to copy the file contents to.</param>
+        /// <param name="target">Стрим, в который нужно скопировать содержимое файла.</param>
         public void CopyTo(Stream target)
         {
-            if (target == null)
-            {
-                throw new ArgumentNullException(nameof(target));
-            }
+            if (target == null) throw new ArgumentNullException(nameof(target));
 
             using var readStream = OpenReadStream();
             readStream.CopyTo(target, DefaultBufferSize);
         }
 
         /// <summary>
-        /// Asynchronously copies the contents of the uploaded file to the <paramref name="target"/> stream.
+        ///     Асинхронно копирует содержимое файла в стрим <paramref name="target" />.
         /// </summary>
-        /// <param name="target">The stream to copy the file contents to.</param>
-        /// <param name="cancellationToken"></param>
-        public async Task CopyToAsync(Stream target, CancellationToken cancellationToken = default(CancellationToken))
+        /// <param name="target">Стрим, в который нужно скопировать содержимое файла.</param>
+        /// <param name="cancellationToken">Токен отмены.</param>
+        public async Task CopyToAsync(Stream target, CancellationToken cancellationToken = default)
         {
-            if (target == null)
-            {
-                throw new ArgumentNullException(nameof(target));
-            }
+            if (target == null) throw new ArgumentNullException(nameof(target));
 
             await using var readStream = OpenReadStream();
             await readStream.CopyToAsync(target, DefaultBufferSize, cancellationToken);

@@ -1,12 +1,10 @@
 ﻿using Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Values;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Binders
 {
     /// <summary>
-    /// An <see cref="IModelBinderProvider"/> for <see cref="IFormFile"/>, collections
-    /// of <see cref="IFormFile"/>, and <see cref="IFormFileCollection"/>.
+    ///     Провайдер класса для связывания данных типа <see cref="FormStreamedFileCollection" />.
     /// </summary>
     public class FormStreamedFileModelBinderProvider : IModelBinderProvider
     {

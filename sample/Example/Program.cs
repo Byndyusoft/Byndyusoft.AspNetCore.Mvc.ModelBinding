@@ -1,4 +1,3 @@
-using Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Binders;
 using Byndyusoft.Example.Services;
 using Byndyusoft.Example.Settings;
 using Microsoft.AspNetCore.Builder;
@@ -9,16 +8,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers(o =>
-{
-    o.ModelBinderProviders.Insert(0, new FormStreamedFileModelBinderProvider());
-});
+builder.Services.AddControllers(o => o.AddFormStreamedFileCollectionBinder());
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<FileService>();
 builder.Services.Configure<SaveFileSettings>(builder.Configuration.GetSection(nameof(SaveFileSettings)));
-builder.Services.AddMultipartFormDataFileProvider();
 
 var app = builder.Build();
 

@@ -20,7 +20,8 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Extensions
         {
             // TODO Вынести
             var httpContextKey = "Byndyusoft.FormData.Stream";
-            if (request.HttpContext.Items.TryGetValue(httpContextKey, out var dtoObject) && dtoObject is FormStreamedDataCollection multipartFormDataDto)
+            if (request.HttpContext.Items.TryGetValue(httpContextKey, out var dtoObject) &&
+                dtoObject is FormStreamedDataCollection multipartFormDataDto)
                 return multipartFormDataDto;
 
             EnsureRequestIsMultipartFormData(request);
@@ -65,7 +66,8 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Extensions
         private static bool HasMultipartFormContentType([NotNullWhen(true)] MediaTypeHeaderValue? contentType)
         {
             // Content-Type: multipart/form-data; boundary=----WebKitFormBoundarymx2fSWqWSd0OxQqq
-            return contentType != null && contentType.MediaType.Equals("multipart/form-data", StringComparison.OrdinalIgnoreCase);
+            return contentType != null &&
+                   contentType.MediaType.Equals("multipart/form-data", StringComparison.OrdinalIgnoreCase);
         }
 
         private static ContentDispositionHeaderValue GetContentDisposition(MultipartSection section)
