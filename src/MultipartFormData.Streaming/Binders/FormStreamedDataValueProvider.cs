@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Dtos;
+using Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Values;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Primitives;
 
 namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Binders
 {
-    public sealed class FormDataValueProvider : BindingSourceValueProvider, IEnumerableValueProvider
+    public sealed class FormStreamedDataValueProvider : BindingSourceValueProvider, IEnumerableValueProvider
     {
         public const string CultureInvariantFieldName = "__Invariant";
         public const string FilesFieldName = "Files";
@@ -24,7 +24,7 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Bin
         /// <param name="bindingSource">The <see cref="BindingSource"/> for the data.</param>
         /// <param name="values">The key value pairs to wrap.</param>
         /// <param name="culture">The culture to return with ValueProviderResult instances.</param>
-        public FormDataValueProvider(
+        public FormStreamedDataValueProvider(
             BindingSource bindingSource,
             FormStreamedDataCollection values,
             CultureInfo? culture)

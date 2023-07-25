@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
 
-namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Dtos
+namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Values
 {
     public class FormStreamedFile : IFormStreamedFile
     {

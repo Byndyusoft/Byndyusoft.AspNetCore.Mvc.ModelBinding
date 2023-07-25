@@ -2,11 +2,11 @@
 
 namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Binders
 {
-    public static class FromDataBindingSource
+    public static class FromStreamedDataBindingSource
     {
         public static readonly BindingSource Instance = new(
-            "FormData",
-            "FormData",
+            "FromStreamedData",
+            "FromStreamedData",
             isGreedy: false,
             isFromRequest: true);
     }

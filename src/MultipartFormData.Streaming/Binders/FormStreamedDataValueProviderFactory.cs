@@ -1,7 +1,8 @@
 ﻿using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
-using Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Dtos;
+using Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Extensions;
+using Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Values;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Binders
@@ -9,7 +10,7 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Bin
     /// <summary>
     ///     Провайдер значений для извлечения данных из формы со стримами
     /// </summary>
-    public class FormDataValueProviderFactory : IValueProviderFactory
+    public class FormStreamedDataValueProviderFactory : IValueProviderFactory
     {
         /// <inheritdoc />
         public Task CreateValueProviderAsync(ValueProviderFactoryContext context)
@@ -47,8 +48,8 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Bin
                 throw new ValueProviderException($"Ошибка считывания данных формы: {ex.Message}", ex);
             }
 
-            var valueProvider = new FormDataValueProvider(
-                FromDataBindingSource.Instance,
+            var valueProvider = new FormStreamedDataValueProvider(
+                FromStreamedDataBindingSource.Instance,
                 formStreamedDataCollection,
                 CultureInfo.CurrentCulture);
 

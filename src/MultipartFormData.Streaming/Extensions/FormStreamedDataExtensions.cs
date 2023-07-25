@@ -1,16 +1,16 @@
-﻿using System.Threading;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
+using Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Values;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.WebUtilities;
-using System.Diagnostics.CodeAnalysis;
-using System;
-using System.Collections.Generic;
 using Microsoft.Net.Http.Headers;
-using System.Runtime.CompilerServices;
-using Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Dtos;
 
-namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming
+namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Extensions
 {
     public static class FormStreamedDataExtensions
     {

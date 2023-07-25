@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
-using Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Dtos;
 
-namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Binders
+namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Values
 {
-    public class StreamFormFileCollection : IAsyncEnumerable<IFormStreamedFile>
+    public class FormStreamedFileCollection : IAsyncEnumerable<IFormStreamedFile>
     {
         private readonly IAsyncEnumerable<IFormStreamedFile> _files;
 
-        public StreamFormFileCollection(IAsyncEnumerable<IFormStreamedFile> files)
+        public FormStreamedFileCollection(IAsyncEnumerable<IFormStreamedFile> files)
         {
             _files = files;
         }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Dtos;
+using Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Extensions;
+using Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Values;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
@@ -10,7 +11,7 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Bin
     /// <summary>
     /// <see cref="IModelBinder"/> implementation to bind posted files to <see cref="IFormFile"/>.
     /// </summary>
-    public class FormDataFileModelBinder : IModelBinder
+    public class FormStreamedFileModelBinder : IModelBinder
     {
         /// <inheritdoc />
         public async Task BindModelAsync(ModelBindingContext bindingContext)
@@ -23,7 +24,7 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Bin
                 : bindingContext.ModelName;
 
             var files = await GetFormFilesAsync(bindingContext);
-            var value = new StreamFormFileCollection(files);
+            var value = new FormStreamedFileCollection(files);
 
             // We need to add a ValidationState entry because the modelName might be non-standard. Otherwise
             // the entry we create in model state might not be marked as valid.

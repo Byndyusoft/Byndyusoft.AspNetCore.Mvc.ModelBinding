@@ -1,4 +1,5 @@
 using Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Binders;
+using Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Values;
 
 namespace Byndyusoft.Example.Dtos
 {
@@ -8,6 +9,6 @@ namespace Byndyusoft.Example.Dtos
 
         public int Age { get; set; }
 
-        public StreamFormFileCollection Files { get; set; } = default!;
+        public FormStreamedFileCollection StreamedFiles { get; set; } = default!;
     }
 }

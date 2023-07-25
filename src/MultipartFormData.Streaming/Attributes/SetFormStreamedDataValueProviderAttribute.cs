@@ -6,13 +6,10 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Attributes
 {
     /// <summary>
-    ///     Атрибут для предотвращения преждевременной вычитки контента из multipart from data     
+    ///     Атрибут для замены стандартной фабрики данных multipart from data на <see cref="FormStreamedDataValueProviderFactory"/>>
     /// </summary>
-    /// <remarks>
-    ///     https://stackoverflow.com/questions/49867343/unexpected-end-of-stream-the-content-may-have-already-been-read-by-another-comp
-    /// </remarks>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-    public class SetFormStreamedDataValueModelBindingAttribute : Attribute, IResourceFilter
+    public class SetFormStreamedDataValueProviderAttribute : Attribute, IResourceFilter
     {
         /// <inheritdoc />
         public void OnResourceExecuting(ResourceExecutingContext context)
@@ -22,7 +19,7 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Att
             factories.RemoveType<FormFileValueProviderFactory>();
             factories.RemoveType<JQueryFormValueProviderFactory>();
 
-            factories.Add(new FormDataValueProviderFactory());
+            factories.Add(new FormStreamedDataValueProviderFactory());
         }
 
         /// <inheritdoc />

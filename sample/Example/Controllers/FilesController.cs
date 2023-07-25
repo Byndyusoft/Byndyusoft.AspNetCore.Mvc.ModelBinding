@@ -50,15 +50,16 @@ namespace Byndyusoft.Example.Controllers
 
         [HttpPost("SaveNew")]
         [RequestSizeLimit(long.MaxValue)]
-        [SetFormStreamedDataValueModelBinding]
-        public async Task<ActionResult<SaveResultDto>> SaveNewWay([FromFormData] NewRequestDto requestDto,
+        [SetFormStreamedDataValueProvider]
+        public async Task<ActionResult<SaveResultDto>> SaveNewWay(
+            [FromFormStreamedData] NewRequestDto requestDto,
             CancellationToken cancellationToken)
         {
             var stopwatch = Stopwatch.StartNew();
 
             var resultDtos = new List<FileResultDto>();
 
-            await foreach (var file in requestDto.Files.WithCancellation(cancellationToken))
+            await foreach (var file in requestDto.StreamedFiles.WithCancellation(cancellationToken))
             {
                 await using var stream = file.OpenReadStream();
                 var filePath = await _fileService.SaveFileAsync(stream, file.FileName, cancellationToken);

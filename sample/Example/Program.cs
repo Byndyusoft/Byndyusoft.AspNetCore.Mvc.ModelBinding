@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers(o =>
 {
-    o.ModelBinderProviders.Insert(0, new FormDataFileModelBinderProvider());
+    o.ModelBinderProviders.Insert(0, new FormStreamedFileModelBinderProvider());
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
