@@ -1,33 +1,16 @@
-using Byndyusoft.Example.Services;
-using Byndyusoft.Example.Settings;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
-builder.Services.AddControllers(o => o.AddFormStreamedFileCollectionBinder());
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton<FileService>();
-builder.Services.Configure<SaveFileSettings>(builder.Configuration.GetSection(nameof(SaveFileSettings)));
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+namespace Byndyusoft.Example
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    public class Program
+    {
+        public static void Main()
+        {
+            Host.CreateDefaultBuilder()
+                .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>())
+                .Build()
+                .Run();
+        }
+    }
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
