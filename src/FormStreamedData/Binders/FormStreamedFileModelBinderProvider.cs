@@ -1,8 +1,8 @@
-﻿using Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Values;
+﻿using Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Values;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Binders
+namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Binders
 {
     /// <summary>
     /// An <see cref="IModelBinderProvider"/> for <see cref="IFormFile"/>, collections

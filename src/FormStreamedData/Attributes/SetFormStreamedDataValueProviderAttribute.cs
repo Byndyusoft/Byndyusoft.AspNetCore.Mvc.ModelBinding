@@ -1,9 +1,9 @@
 ﻿using System;
-using Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Binders;
+using Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Binders;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Attributes
+namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Attributes
 {
     /// <summary>
     ///     Атрибут для замены стандартной фабрики данных multipart from data на <see cref="FormStreamedDataValueProviderFactory"/>>

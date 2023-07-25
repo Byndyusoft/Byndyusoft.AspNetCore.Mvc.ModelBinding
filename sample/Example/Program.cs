@@ -1,4 +1,4 @@
-using Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Binders;
+using Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Binders;
 using Byndyusoft.Example.Services;
 using Byndyusoft.Example.Settings;
 using Microsoft.AspNetCore.Builder;

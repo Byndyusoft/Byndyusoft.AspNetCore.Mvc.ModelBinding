@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Values
+namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Values
 {
     public interface IFormStreamedFile : IFormFile
     {

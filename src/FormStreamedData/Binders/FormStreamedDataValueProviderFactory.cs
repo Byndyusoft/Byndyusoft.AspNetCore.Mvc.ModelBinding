@@ -1,11 +1,11 @@
 ﻿using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
-using Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Extensions;
-using Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Values;
+using Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Extensions;
+using Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Values;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Binders
+namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Binders
 {
     /// <summary>
     ///     Провайдер значений для извлечения данных из формы со стримами

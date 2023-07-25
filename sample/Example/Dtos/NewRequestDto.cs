@@ -1,5 +1,4 @@
-using Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Binders;
-using Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Values;
+using Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Values;
 
 namespace Byndyusoft.Example.Dtos
 {

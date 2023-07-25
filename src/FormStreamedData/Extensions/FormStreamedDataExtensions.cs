@@ -4,13 +4,13 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
-using Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Values;
+using Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Values;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Net.Http.Headers;
 
-namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Extensions
+namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Extensions
 {
     public static class FormStreamedDataExtensions
     {

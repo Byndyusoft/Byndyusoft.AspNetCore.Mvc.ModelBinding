@@ -1,4 +1,4 @@
-﻿using Byndyusoft.AspNetCore.Mvc.ModelBinding.MultipartFormData.Streaming.Values;
+﻿using Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Values;
 using Microsoft.AspNetCore.Http;
 
 namespace Byndyusoft.Example.Dtos
