@@ -6,19 +6,19 @@ This package allows you to read form data values and files. Files streams are no
 
 Default asp net core behaviour reads all form contents including files during model binding process. File streams are fully drained to the end and their contents are saved in memory and/or disk before any user custom code.
 
-This behaviour is not convenient when large files are sent and are wanted to be treated as streams. 
+This behaviour is not convenient when large files are sent and we want to treat them as streams. 
 Possible cases:
-- You create S3 gateway service and want save files to S3 as streams.
-- You want to read form string values first and validate its data before reading files content.
+- You create S3 gateway service and want to upload files to S3 as streams.
+- You want to read form string values first and validate its data before reading any files' content.
 
-This package allows you to use default binding model except for files that will be read by user code after model binding process.
+This package allows you to use default binding model except for files that will be available to user code later after model binding process.
 
 ## Requirements
 
 - Always provide form string values first.
 - Always provide from file values last.
-- Read file streams consequentially, that is first get first IFormStreamedFile object then read its stream to the end, then get next IFormStreamedFile object then read its stream to the end. When you get next IFormStreamedFile object then the first file stream will be read automatically to the end and you will not be able to read it.
-- Use only one property or one parameter with type [FormStreamedFileCollection](src/FormStreamedData/Values/FormStreamedFileCollection.cs) because it will always be one stream.
+- Read file streams consequentially, that is at the beginning get first IFormStreamedFile object then read its stream to the end. Then get next IFormStreamedFile object and then read its stream to the end. When you get next IFormStreamedFile object the first file stream will be read automatically to the end and you will not be able to read it.
+- Use only one property or one parameter of type [FormStreamedFileCollection](src/FormStreamedData/Values/FormStreamedFileCollection.cs) because it will always be one stream.
 
 ## Installing
 
@@ -38,7 +38,7 @@ Set [SetFormStreamedDataValueProviderAttribute](src/FormStreamedData/Attributes/
 This will replace default value providers for form data with [FormStreamedDataValueProvider](src/FormStreamedData/Binders/FormStreamedDataValueProvider.cs).
 
 Set [FromFormStreamedDataAttribute](src/FormStreamedData/Attributes/FromFormStreamedDataAttribute.cs) for action parameters or request object properties that should be bound to form values.
-To read files' streams use only one property or one parameter with type [FormStreamedFileCollection](src/FormStreamedData/Values/FormStreamedFileCollection.cs).
+To read files' streams use only one property or one parameter of type [FormStreamedFileCollection](src/FormStreamedData/Values/FormStreamedFileCollection.cs).
 
 Examples:
 ```csharp
