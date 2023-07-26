@@ -14,13 +14,13 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Extensions
 {
     public static class FormStreamedDataExtensions
     {
+        private const string HttpContextKey = "Byndyusoft.FormData.Stream";
+
         public static async Task<FormStreamedDataCollection> ReadFormStreamedDataAsync(
             this HttpRequest request,
             CancellationToken cancellationToken = default)
         {
-            // TODO Вынести
-            var httpContextKey = "Byndyusoft.FormData.Stream";
-            if (request.HttpContext.Items.TryGetValue(httpContextKey, out var dtoObject) &&
+            if (request.HttpContext.Items.TryGetValue(HttpContextKey, out var dtoObject) &&
                 dtoObject is FormStreamedDataCollection multipartFormDataDto)
                 return multipartFormDataDto;
 
@@ -51,7 +51,7 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Extensions
             var files = EnumerateFilesAsync(reader, section, cancellationToken);
             multipartFormDataDto = new FormStreamedDataCollection(formAccumulator.GetResults(), files);
 
-            request.HttpContext.Items[httpContextKey] = multipartFormDataDto;
+            request.HttpContext.Items[HttpContextKey] = multipartFormDataDto;
 
             return multipartFormDataDto;
         }
