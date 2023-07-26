@@ -8,10 +8,10 @@
 		<AssemblyName>Byndyusoft.$(MSBuildProjectName)</AssemblyName>
 		<RootNamespace>Byndyusoft.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
 		
-		<VersionPrefix>0.0.1</VersionPrefix>
+		<VersionPrefix>1.0.0</VersionPrefix>
 		<Authors>Byndyusoft</Authors>
 		
-		<PackageTags>Byndyusoft;NugetPackageExample</PackageTags>
+		<PackageTags>Byndyusoft;AspNetCore;Mvc;MultipartFormData;Stream;File;FormData</PackageTags>
 		
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
