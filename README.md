@@ -1,6 +1,6 @@
 # Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData [![Nuget](https://img.shields.io/nuget/v/ExampleProject.svg)](https://www.nuget.org/packages/Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData/)[![Downloads](https://img.shields.io/nuget/dt/Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.svg)](https://www.nuget.org/packages/Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData/)
 
-Package description
+This package allows you to read form data values and files. Files are not read from requests during model binding and files' streams are provided for developers. These files' streams must be read consequentially.
 
 ## Installing
 
@@ -10,11 +10,14 @@ dotnet add package Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData
 
 ## Usage
 
-Usage description
+Register model binder for [FormStreamedFileCollection](src/FormStreamedData/Values/FormStreamedFileCollection.cs) type.
 
 ```csharp
-  TODO
+  services.AddControllers(o => o.AddFormStreamedFileCollectionBinder());
 ```
+
+Replace default value providers with [FormStreamedDataValueProvider](src/FormStreamedData/Binders/FormStreamedDataValueProvider.cs) for form-data actions by using [SetFormStreamedDataValueProviderAttribute](src/FormStreamedData/Attributes/SetFormStreamedDataValueProviderAttribute.cs).
+Set 
 
 # Contributing
 
