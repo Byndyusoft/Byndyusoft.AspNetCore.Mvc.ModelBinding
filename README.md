@@ -16,8 +16,65 @@ Register model binder for [FormStreamedFileCollection](src/FormStreamedData/Valu
   services.AddControllers(o => o.AddFormStreamedFileCollectionBinder());
 ```
 
-Replace default value providers with [FormStreamedDataValueProvider](src/FormStreamedData/Binders/FormStreamedDataValueProvider.cs) for form-data actions by using [SetFormStreamedDataValueProviderAttribute](src/FormStreamedData/Attributes/SetFormStreamedDataValueProviderAttribute.cs).
-Set 
+Set [SetFormStreamedDataValueProviderAttribute](src/FormStreamedData/Attributes/SetFormStreamedDataValueProviderAttribute.cs) for controller actions where file streams should be read.
+This will replace default value providers for form data with [FormStreamedDataValueProvider](src/FormStreamedData/Binders/FormStreamedDataValueProvider.cs).
+
+Set [FromFormStreamedDataAttribute](src/FormStreamedData/Attributes/FromFormStreamedDataAttribute.cs) for action parameters or request object properties that should be bound to form values.
+To read files' streams use only one property or one parameter with type [FormStreamedFileCollection](src/FormStreamedData/Values/FormStreamedFileCollection.cs).
+
+Examples:
+```csharp
+public class NewRequestDto
+{
+	public string Name { get; set; }
+	public int Age { get; set; }
+	public FormStreamedFileCollection StreamedFiles { get; set; }
+}
+
+[ApiController]
+[Route("[controller]")]
+public class FilesController : ControllerBase
+{
+	private readonly FileService _fileService;
+
+	public FilesController(FileService fileService)
+	{		
+		_fileService = fileService;
+	}
+
+	[HttpPost("SaveNew")]
+	[RequestSizeLimit(long.MaxValue)]
+	[SetFormStreamedDataValueProvider]
+	public async Task<ActionResult> SaveNewWay(
+		[FromFormStreamedData] NewRequestDto requestDto,
+		CancellationToken cancellationToken)
+	{		
+		await foreach (var file in requestDto.StreamedFiles.WithCancellation(cancellationToken))
+		{
+			await using var stream = file.OpenReadStream();
+			await _fileService.SaveFileAsync(stream, file.FileName, cancellationToken);
+		}
+
+		return Ok();
+	}
+
+	[HttpPost("SaveNewByParameter")]
+	[RequestSizeLimit(long.MaxValue)]
+	[SetFormStreamedDataValueProvider]
+	public async Task<ActionResult> SaveNewWayByParameter(
+		FormStreamedFileCollection files,
+		CancellationToken cancellationToken)
+	{
+		await foreach (var file in files.WithCancellation(cancellationToken))
+		{
+			await using var stream = file.OpenReadStream();
+			var filePath = await _fileService.SaveFileAsync(stream, file.FileName, cancellationToken);
+		}
+
+		return Ok();
+	}
+}
+```
 
 # Contributing
 
