@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -8,30 +10,34 @@ using Xunit;
 
 namespace Byndyusoft.IntegrationTests.Tests
 {
-    public class FilesControllerTests
+    public class FilesControllerTests : IDisposable
     {
+        private const string FirstFileName = "FirstFile";
+        private const string SecondFileName = "SecondFile";
         private readonly HttpClient _httpClient;
+        private readonly ApiFixture _apiFixture;
 
         public FilesControllerTests()
         {
-            var apiFixture = new ApiFixture();
-            _httpClient = apiFixture.CreateClient();
+            _apiFixture = new ApiFixture();
+            _httpClient = _apiFixture.CreateClient();
         }
 
         [Fact]
-        public async Task Test()
+        public async Task BindToModel_FirstValuesThenFiles_ModelIsBoundCorrectly_AndFileContentsAreCorrect()
         {
             // Arrange
-            using var multipartFormDataContent = new MultipartFormDataContent();
+            using var multipartFormDataContent = new MultipartFormDataContent
+            {
+                { new StringContent("Ivan"), "Name" },
+                { new StringContent("35"), "Age" }
+            };
 
-            multipartFormDataContent.Add(new StringContent("Ivan"), "Name");
-            multipartFormDataContent.Add(new StringContent("35"), "Age");
+            using var firstStreamContent = TestHelper.CreateStreamContent(FileNames.FirstFile);
+            multipartFormDataContent.Add(firstStreamContent, FirstFileName, FileNames.FirstFile);
 
-            using var firstStreamContent = Helper.CreateStreamContent(FileNames.FirstFile);
-            multipartFormDataContent.Add(firstStreamContent, "FirstFile", FileNames.FirstFile);
-
-            using var secondStreamContent = Helper.CreateStreamContent(FileNames.SecondFile);
-            multipartFormDataContent.Add(secondStreamContent, "SecondFile", FileNames.SecondFile);
+            using var secondStreamContent = TestHelper.CreateStreamContent(FileNames.SecondFile);
+            multipartFormDataContent.Add(secondStreamContent, SecondFileName, FileNames.SecondFile);
 
             // Act
             using var httpResponseMessage = await _httpClient.PostAsync("Files/SaveNew", multipartFormDataContent);
@@ -40,8 +46,8 @@ namespace Byndyusoft.IntegrationTests.Tests
             httpResponseMessage.EnsureSuccessStatusCode();
             var saveResultDto = await httpResponseMessage.Content.ReadFromJsonAsync<SaveResultDto>();
 
-            var firstFileBytes = await Helper.ReadFileBytesAsync(FileNames.FirstFile);
-            var secondFileBytes = await Helper.ReadFileBytesAsync(FileNames.SecondFile);
+            var firstFileBytes = await TestHelper.ReadFileBytesAsync(FileNames.FirstFile);
+            var secondFileBytes = await TestHelper.ReadFileBytesAsync(FileNames.SecondFile);
 
             var expectedResultDto = new SaveResultDto
             {
@@ -51,13 +57,13 @@ namespace Byndyusoft.IntegrationTests.Tests
                 {
                     new FileResultDto
                     {
-                        Name = "FirstFile",
+                        Name = FirstFileName,
                         FileName = FileNames.FirstFile,
                         ContentLength = firstFileBytes.Length
                     },
                     new FileResultDto
                     {
-                        Name = "SecondFile",
+                        Name = SecondFileName,
                         FileName = FileNames.SecondFile,
                         ContentLength = secondFileBytes.Length
                     }
@@ -66,38 +72,160 @@ namespace Byndyusoft.IntegrationTests.Tests
             saveResultDto.Should().BeEquivalentTo(expectedResultDto,
                 o => o.Excluding(mi =>
                     mi.DeclaringType == typeof(FileResultDto) && mi.Name == nameof(FileResultDto.FilePath)));
-        }
-    }
 
-    public class FileNames
-    {
-        public const string FirstFile = "FirstPicture.jpg";
+            var firstFilePath = saveResultDto!.Files.Single(i => i.Name == FirstFileName).FilePath;
+            await AssertFileContentsAsync(firstFilePath, firstFileBytes);
 
-        public const string SecondFile = "SecondPicture.jpg";
-    }
-
-    public class Helper
-    {
-        public static StreamContent CreateStreamContent(string fileName)
-        {
-            var filePath = GetFilePath(fileName);
-            var fileInfo = new FileInfo(filePath);
-            var fileStream = fileInfo.OpenRead();
-
-            var streamContent = new StreamContent(fileStream);
-            streamContent.Headers.ContentLength = fileInfo.Length;
-
-            return streamContent;
+            var secondFilePath = saveResultDto.Files.Single(i => i.Name == SecondFileName).FilePath;
+            await AssertFileContentsAsync(secondFilePath, secondFileBytes);
         }
 
-        public static async Task<byte[]> ReadFileBytesAsync(string fileName)
+        [Fact]
+        public async Task BindToModel_ThereAreValuesAfterFiles_ThrowsException()
         {
-            return await File.ReadAllBytesAsync(GetFilePath(fileName));
+            // Arrange
+            using var multipartFormDataContent = new MultipartFormDataContent
+            {
+                { new StringContent("Ivan"), "Name" }
+            };
+
+            using var firstStreamContent = TestHelper.CreateStreamContent(FileNames.FirstFile);
+            multipartFormDataContent.Add(firstStreamContent, FirstFileName, FileNames.FirstFile);
+
+            using var secondStreamContent = TestHelper.CreateStreamContent(FileNames.SecondFile);
+            multipartFormDataContent.Add(secondStreamContent, SecondFileName, FileNames.SecondFile);
+
+            multipartFormDataContent.Add(new StringContent("35"), "Age");
+
+            // Act
+            // ReSharper disable once AccessToDisposedClosure
+            Func<Task<HttpResponseMessage>> action = () => _httpClient.PostAsync("Files/SaveNew", multipartFormDataContent);
+
+            // Assert
+            await action.Should().ThrowAsync<InvalidOperationException>();
         }
 
-        private static string GetFilePath(string fileName)
+        [Fact]
+        public async Task BindToParameter_OnlyFiles_ParameterIsBoundCorrectly_AndFileContentsAreCorrect()
         {
-            return Path.Combine("TestFiles", fileName);
+            // Arrange
+            using var multipartFormDataContent = new MultipartFormDataContent();
+
+            using var firstStreamContent = TestHelper.CreateStreamContent(FileNames.FirstFile);
+            multipartFormDataContent.Add(firstStreamContent, FirstFileName, FileNames.FirstFile);
+
+            using var secondStreamContent = TestHelper.CreateStreamContent(FileNames.SecondFile);
+            multipartFormDataContent.Add(secondStreamContent, SecondFileName, FileNames.SecondFile);
+
+            // Act
+            using var httpResponseMessage = await _httpClient.PostAsync("Files/SaveNewByParameter", multipartFormDataContent);
+
+            // Assert
+            httpResponseMessage.EnsureSuccessStatusCode();
+            var fileResultDtos = await httpResponseMessage.Content.ReadFromJsonAsync<FileResultDto[]>();
+
+            var firstFileBytes = await TestHelper.ReadFileBytesAsync(FileNames.FirstFile);
+            var secondFileBytes = await TestHelper.ReadFileBytesAsync(FileNames.SecondFile);
+
+            var expectedResultDto = new FileResultDto[]
+            {
+                new()
+                {
+                    Name = FirstFileName,
+                    FileName = FileNames.FirstFile,
+                    ContentLength = firstFileBytes.Length
+                },
+                new()
+                {
+                    Name = SecondFileName,
+                    FileName = FileNames.SecondFile,
+                    ContentLength = secondFileBytes.Length
+                }
+            };
+
+            fileResultDtos.Should().BeEquivalentTo(expectedResultDto,
+                o => o.Excluding(mi =>
+                    mi.DeclaringType == typeof(FileResultDto) && mi.Name == nameof(FileResultDto.FilePath)));
+
+            var firstFilePath = fileResultDtos!.Single(i => i.Name == FirstFileName).FilePath;
+            await AssertFileContentsAsync(firstFilePath, firstFileBytes);
+
+            var secondFilePath = fileResultDtos!.Single(i => i.Name == SecondFileName).FilePath;
+            await AssertFileContentsAsync(secondFilePath, secondFileBytes);
+        }
+
+        [Fact]
+        public async Task BindToParameter_AndStreamsAreUsedIncorrectly_OnlyFiles_ParameterIsBoundCorrectly_AndFilesAreEmpty()
+        {
+            // Arrange
+            using var multipartFormDataContent = new MultipartFormDataContent();
+
+            using var firstStreamContent = TestHelper.CreateStreamContent(FileNames.FirstFile);
+            multipartFormDataContent.Add(firstStreamContent, FirstFileName, FileNames.FirstFile);
+
+            using var secondStreamContent = TestHelper.CreateStreamContent(FileNames.SecondFile);
+            multipartFormDataContent.Add(secondStreamContent, SecondFileName, FileNames.SecondFile);
+
+            // Act
+            using var httpResponseMessage = await _httpClient.PostAsync("Files/SaveNewIncorrectly", multipartFormDataContent);
+
+            // Assert
+            httpResponseMessage.EnsureSuccessStatusCode();
+            var fileResultDtos = await httpResponseMessage.Content.ReadFromJsonAsync<FileResultDto[]>();
+
+            var firstFileBytes = await TestHelper.ReadFileBytesAsync(FileNames.FirstFile);
+            var secondFileBytes = await TestHelper.ReadFileBytesAsync(FileNames.SecondFile);
+
+            var expectedResultDto = new FileResultDto[]
+            {
+                new()
+                {
+                    Name = FirstFileName,
+                    FileName = FileNames.FirstFile,
+                    ContentLength = firstFileBytes.Length
+                },
+                new()
+                {
+                    Name = SecondFileName,
+                    FileName = FileNames.SecondFile,
+                    ContentLength = secondFileBytes.Length
+                }
+            };
+
+            fileResultDtos.Should().BeEquivalentTo(expectedResultDto,
+                o => o.Excluding(mi =>
+                    mi.DeclaringType == typeof(FileResultDto) && mi.Name == nameof(FileResultDto.FilePath)));
+
+            var emptyFileContents = Array.Empty<byte>();
+
+            var firstFilePath = fileResultDtos!.Single(i => i.Name == FirstFileName).FilePath;
+            await AssertFileContentsAsync(firstFilePath, emptyFileContents);
+
+            var secondFilePath = fileResultDtos!.Single(i => i.Name == SecondFileName).FilePath;
+            await AssertFileContentsAsync(secondFilePath, emptyFileContents);
+        }
+
+        private async Task AssertFileContentsAsync(string filePath, byte[] expectedFileBytes)
+        {
+            var actualFileBytes = await File.ReadAllBytesAsync(filePath);
+            actualFileBytes.Should().BeEquivalentTo(expectedFileBytes, o => o.WithStrictOrdering());
+        }
+
+        public void Dispose()
+        {
+            try
+            {
+                var directoryInfo = new DirectoryInfo(_apiFixture.SaveFileSettings.FolderName);
+                if (directoryInfo.Exists is false)
+                    return;
+
+                foreach (var fileInfo in directoryInfo.EnumerateFiles()) 
+                    fileInfo.Delete();
+            }
+            catch
+            {
+                // ignored
+            }
         }
     }
 }

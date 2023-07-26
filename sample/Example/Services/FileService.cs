@@ -18,6 +18,8 @@ namespace Byndyusoft.Example.Services
 
         public async Task<string> SaveFileAsync(Stream stream, string fileName, CancellationToken cancellationToken)
         {
+            Directory.CreateDirectory(_saveFileSettings.FolderName);
+
             var filePath = Path.Combine(_saveFileSettings.FolderName, fileName);
             await using var fileStream = File.OpenWrite(filePath);
             await stream.CopyToAsync(fileStream, cancellationToken);

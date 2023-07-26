@@ -1,5 +1,4 @@
-﻿using System;
-using Byndyusoft.Example.Services;
+﻿using Byndyusoft.Example.Services;
 using Byndyusoft.Example.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -29,8 +28,6 @@ namespace Byndyusoft.Example
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            var environmentVariables = Environment.GetEnvironmentVariables();
-
             if (env.IsDevelopment())
             {
                 app.UseSwagger();

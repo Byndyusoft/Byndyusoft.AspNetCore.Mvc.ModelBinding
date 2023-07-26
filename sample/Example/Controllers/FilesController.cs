@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Attributes;
 using Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Binders;
+using Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Values;
 using Byndyusoft.Example.Dtos;
 using Byndyusoft.Example.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -70,6 +71,57 @@ namespace Byndyusoft.Example.Controllers
             _logger.LogInformation("{OperationName} took {Elapsed}", nameof(SaveNewWay), stopwatch.Elapsed);
 
             return SaveResultDtoMapper.MapFrom(requestDto, resultDtos.ToArray());
+        }
+
+        [HttpPost("SaveNewByParameter")]
+        [RequestSizeLimit(long.MaxValue)]
+        [SetFormStreamedDataValueProvider]
+        public async Task<ActionResult<FileResultDto[]>> SaveNewWayByParameter(
+            FormStreamedFileCollection files,
+            CancellationToken cancellationToken)
+        {
+            var stopwatch = Stopwatch.StartNew();
+
+            var resultDtos = new List<FileResultDto>();
+
+            await foreach (var file in files.WithCancellation(cancellationToken))
+            {
+                await using var stream = file.OpenReadStream();
+                var filePath = await _fileService.SaveFileAsync(stream, file.FileName, cancellationToken);
+                resultDtos.Add(FileResultDtoMapper.MapFrom(file, filePath));
+            }
+
+            stopwatch.Stop();
+            _logger.LogInformation("{OperationName} took {Elapsed}", nameof(SaveNewWay), stopwatch.Elapsed);
+
+            return resultDtos.ToArray();
+        }
+
+        [HttpPost("SaveNewIncorrectly")]
+        [RequestSizeLimit(long.MaxValue)]
+        [SetFormStreamedDataValueProvider]
+        public async Task<ActionResult<FileResultDto[]>> SaveNewWayIncorrectly(
+            FormStreamedFileCollection files,
+            CancellationToken cancellationToken)
+        {
+            var stopwatch = Stopwatch.StartNew();
+
+            var formStreamedFiles = new List<IFormStreamedFile>();
+            await foreach (var file in files.WithCancellation(cancellationToken)) 
+                formStreamedFiles.Add(file);
+
+            var resultDtos = new List<FileResultDto>();
+            foreach (var file in formStreamedFiles)
+            {
+                await using var stream = file.OpenReadStream();
+                var filePath = await _fileService.SaveFileAsync(stream, file.FileName, cancellationToken);
+                resultDtos.Add(FileResultDtoMapper.MapFrom(file, filePath));
+            }
+
+            stopwatch.Stop();
+            _logger.LogInformation("{OperationName} took {Elapsed}", nameof(SaveNewWay), stopwatch.Elapsed);
+
+            return resultDtos.ToArray();
         }
     }
 }
