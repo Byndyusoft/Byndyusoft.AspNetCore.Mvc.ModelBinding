@@ -1,7 +1,8 @@
 ﻿using System;
+using Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Binders;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Binders
+namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Attributes
 {
     /// <summary>
     ///     Обозначает, что параметр или свойство должно быть привязано к полю из form-data в теле запроса.
