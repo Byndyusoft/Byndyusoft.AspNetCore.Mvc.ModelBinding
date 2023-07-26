@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace Byndyusoft.Example
+namespace Byndyusoft.TestApi
 {
     public class Program
     {

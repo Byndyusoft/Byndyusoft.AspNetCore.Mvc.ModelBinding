@@ -1,7 +1,7 @@
 ﻿using Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Values;
 using Microsoft.AspNetCore.Http;
 
-namespace Byndyusoft.Example.Dtos
+namespace Byndyusoft.TestApi.Dtos
 {
     public static class FileResultDtoMapper
     {

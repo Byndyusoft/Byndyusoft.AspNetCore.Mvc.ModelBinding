@@ -1,6 +1,6 @@
 using Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Values;
 
-namespace Byndyusoft.Example.Dtos
+namespace Byndyusoft.TestApi.Dtos
 {
     public class NewRequestDto
     {

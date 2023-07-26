@@ -1,4 +1,4 @@
-﻿namespace Byndyusoft.Example.Dtos
+﻿namespace Byndyusoft.TestApi.Dtos
 {
     public class FileResultDto
     {

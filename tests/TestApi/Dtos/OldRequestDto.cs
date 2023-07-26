@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 
-namespace Byndyusoft.Example.Dtos
+namespace Byndyusoft.TestApi.Dtos
 {
     public class OldRequestDto
     {

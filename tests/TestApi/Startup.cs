@@ -1,12 +1,12 @@
-﻿using Byndyusoft.Example.Services;
-using Byndyusoft.Example.Settings;
+﻿using Byndyusoft.TestApi.Services;
+using Byndyusoft.TestApi.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace Byndyusoft.Example
+namespace Byndyusoft.TestApi
 {
     public class Startup
     {

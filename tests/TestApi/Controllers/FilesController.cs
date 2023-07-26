@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 using Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Attributes;
 using Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Binders;
 using Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Values;
-using Byndyusoft.Example.Dtos;
-using Byndyusoft.Example.Services;
+using Byndyusoft.TestApi.Dtos;
+using Byndyusoft.TestApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace Byndyusoft.Example.Controllers
+namespace Byndyusoft.TestApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]

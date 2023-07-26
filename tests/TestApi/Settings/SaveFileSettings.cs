@@ -1,4 +1,4 @@
-﻿namespace Byndyusoft.Example.Settings
+﻿namespace Byndyusoft.TestApi.Settings
 {
     public class SaveFileSettings
     {

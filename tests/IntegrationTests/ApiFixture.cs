@@ -1,6 +1,6 @@
 ﻿using System.IO;
-using Byndyusoft.Example;
-using Byndyusoft.Example.Settings;
+using Byndyusoft.TestApi;
+using Byndyusoft.TestApi.Settings;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;

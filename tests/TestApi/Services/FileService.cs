@@ -1,10 +1,10 @@
 ﻿using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Byndyusoft.Example.Settings;
+using Byndyusoft.TestApi.Settings;
 using Microsoft.Extensions.Options;
 
-namespace Byndyusoft.Example.Services
+namespace Byndyusoft.TestApi.Services
 {
     public class FileService
     {
