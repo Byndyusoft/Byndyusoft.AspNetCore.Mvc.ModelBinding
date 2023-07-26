@@ -91,14 +91,14 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Extensions
                 if (contentDisposition.IsFileDisposition() == false)
                     throw new InvalidOperationException("Ожидались только секции с файлами");
 
-                var multipartFormDataFileDto = GetMultipartFormDataFileDto(section, contentDisposition);
+                var multipartFormDataFileDto = GetFormStreamedFile(section, contentDisposition);
                 yield return multipartFormDataFileDto;
 
                 section = await multipartReader.ReadNextSectionAsync(cancellationToken);
             }
         }
 
-        private static IFormStreamedFile GetMultipartFormDataFileDto(
+        private static IFormStreamedFile GetFormStreamedFile(
             MultipartSection section,
             ContentDispositionHeaderValue contentDisposition)
         {

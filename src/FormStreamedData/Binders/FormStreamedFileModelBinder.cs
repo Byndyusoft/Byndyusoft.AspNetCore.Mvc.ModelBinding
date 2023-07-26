@@ -44,8 +44,8 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Binders
         private async Task<IAsyncEnumerable<IFormStreamedFile>> GetFormFilesAsync(ModelBindingContext bindingContext)
         {
             var request = bindingContext.HttpContext.Request;
-            var multipartFormDataCollection = await request.ReadFormStreamedDataAsync();
-            return multipartFormDataCollection.Files;
+            var formStreamedDataCollection = await request.ReadFormStreamedDataAsync();
+            return formStreamedDataCollection.Files;
         }
     }
 }
