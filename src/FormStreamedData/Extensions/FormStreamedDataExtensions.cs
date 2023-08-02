@@ -89,7 +89,8 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Extensions
                 var contentDisposition = GetContentDisposition(section);
 
                 if (contentDisposition.IsFileDisposition() == false)
-                    throw new InvalidOperationException("Ожидались только секции с файлами");
+                    throw new InvalidOperationException(
+                        "Ожидались в начале  - только секции со строковыми значениями, в конце - только секции с файлами. ");
 
                 var multipartFormDataFileDto = GetFormStreamedFile(section, contentDisposition);
                 yield return multipartFormDataFileDto;
