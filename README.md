@@ -34,7 +34,7 @@ The implementation is based on Microsoft [suggestion](https://learn.microsoft.co
 ## Requirements
 
 - Always provide form string values first.
-- Always provide from file values last.
+- Always provide form file values last.
 - Read file streams consequentially, that is at the beginning get first IFormStreamedFile object then read its stream to the end. Then get next IFormStreamedFile object and then read its stream to the end. When you get next IFormStreamedFile object the first file stream will be read automatically to the end and you will not be able to read it.
 - Use only one property or one parameter of type [FormStreamedFileCollection](src/FormStreamedData/Values/FormStreamedFileCollection.cs) because it will always be one stream.
 - Do not combine standard behaviour and this behaviour in on controller action. For example, do not use IFormFile and [FormStreamedFileCollection](src/FormStreamedData/Values/FormStreamedFileCollection.cs) in one action.
