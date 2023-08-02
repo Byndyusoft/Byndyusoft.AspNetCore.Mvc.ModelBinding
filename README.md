@@ -13,6 +13,12 @@ Possible cases:
 
 This package allows you to use default binding model except for files that will be available to user code later after model binding process.
 
+The implementation is based on Microsoft [suggestion](https://learn.microsoft.com/en-us/aspnet/core/mvc/models/file-uploads?view=aspnetcore-7.0#upload-large-files-with-streaming) with addition:
+- DisableFormValueModelBindingAttribute is presented as [SetFormStreamedDataValueProviderAttribute](src/FormStreamedData/Attributes/SetFormStreamedDataValueProviderAttribute.cs) which actually replaces value provider with new [provider](src/FormStreamedData/Binders/FormStreamedDataValueProvider.cs).
+- Model binding is enabled. It means that all standard and custom binding to your properties of specific types from string values is supported.
+- Model binding of property or parameter of type [FormStreamedFileCollection](src/FormStreamedData/Values/FormStreamedFileCollection.cs) is introduced. This type allows reading file contents consequentially by user code after model binding process.
+- You can read form data with [ReadFormStreamedDataAsync](src/FormStreamedData/Extensions/FormStreamedDataExtensions.cs) extensions method of HttpRequest.
+
 ## Requirements
 
 - Always provide form string values first.
