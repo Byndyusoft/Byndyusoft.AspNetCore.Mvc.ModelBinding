@@ -1,4 +1,4 @@
-# Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData [![Nuget](https://img.shields.io/nuget/v/ExampleProject.svg)](https://www.nuget.org/packages/Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData/)[![Downloads](https://img.shields.io/nuget/dt/Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.svg)](https://www.nuget.org/packages/Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData/)
+# Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData [![Nuget](https://img.shields.io/nuget/v/Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.svg)](https://www.nuget.org/packages/Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData/)[![Downloads](https://img.shields.io/nuget/dt/Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.svg)](https://www.nuget.org/packages/Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData/)
 
 This package allows you to read form data values and files. Files streams are not read in binding model process and are provided to be used in user code.
 
@@ -18,6 +18,10 @@ There are some drawbacks:
 - Swagger is not supported.
 - FormOptions settings are not supported yet.
 - RequestFormLimitsAttribute is not supported yet.
+
+It is recommended to use standard behaviour if both conditions are met:
+1. You don't need streaming.
+2. You have enough resources to store incoming files' content of all simultaneous requests in memory and on disk.
 
 ## Implementation
 
