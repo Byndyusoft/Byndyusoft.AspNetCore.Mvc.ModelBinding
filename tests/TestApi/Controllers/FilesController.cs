@@ -122,5 +122,50 @@ namespace Byndyusoft.TestApi.Controllers
 
             return resultDtos.ToArray();
         }
+        [HttpPost("HashOld")]
+        [RequestSizeLimit(int.MaxValue)]
+        [RequestFormLimits(MultipartBodyLengthLimit = int.MaxValue)]
+        public async Task<ActionResult<string[]>> HashOldWay([FromForm] OldRequestDto requestDto, CancellationToken cancellationToken)
+        {
+            var stopwatch = Stopwatch.StartNew();
+
+            var hashes = new List<string>();
+
+            foreach (var file in requestDto.Files)
+            {
+                await using var stream = file.OpenReadStream();
+                var hash = await _fileService.CalculateHashAsync(stream, cancellationToken);
+                hashes.Add(hash);
+            }
+
+            stopwatch.Stop();
+            _logger.LogInformation("{OperationName} took {Elapsed}", nameof(HashOldWay), stopwatch.Elapsed);
+
+            return hashes.ToArray();
+        }
+
+        [HttpPost("HashNew")]
+        [RequestSizeLimit(long.MaxValue)]
+        [SetFormStreamedDataValueProvider]
+        public async Task<ActionResult<string[]>> HashNewWay(
+            [FromFormStreamedData] NewRequestDto requestDto,
+            CancellationToken cancellationToken)
+        {
+            var stopwatch = Stopwatch.StartNew();
+
+            var hashes = new List<string>();
+
+            await foreach (var file in requestDto.StreamedFiles.WithCancellation(cancellationToken))
+            {
+                await using var stream = file.OpenReadStream();
+                var hash = await _fileService.CalculateHashAsync(stream, cancellationToken);
+                hashes.Add(hash);
+            }
+
+            stopwatch.Stop();
+            _logger.LogInformation("{OperationName} took {Elapsed}", nameof(HashNewWay), stopwatch.Elapsed);
+
+            return hashes.ToArray();
+        }
     }
 }

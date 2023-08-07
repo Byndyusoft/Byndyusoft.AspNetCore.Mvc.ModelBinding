@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 using Byndyusoft.TestApi.Settings;
@@ -27,6 +29,15 @@ namespace Byndyusoft.TestApi.Services
             await fileStream.FlushAsync(cancellationToken);
 
             return filePath;
+        }
+
+        public async Task<string> CalculateHashAsync(Stream stream, CancellationToken cancellationToken)
+        {
+            var md5 = MD5.Create();
+            var hash = await md5.ComputeHashAsync(stream, cancellationToken);
+            var base64String = Convert.ToBase64String(hash);
+
+            return base64String;
         }
     }
 }
