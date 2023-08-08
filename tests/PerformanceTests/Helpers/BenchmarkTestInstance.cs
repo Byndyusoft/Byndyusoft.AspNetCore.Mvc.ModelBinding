@@ -1,7 +1,6 @@
-﻿using System.IO;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
-using PerformanceTests.Consts;
+using PerformanceTests.Files;
 
 namespace PerformanceTests.Helpers
 {
@@ -16,27 +15,22 @@ namespace PerformanceTests.Helpers
             _postMethodPrefix = postMethodPrefix;
         }
         
-        public async Task<T> TestOldWay<T>(string subfolder)
+        public async Task<T> TestOldWay<T>(TestFileSize testFileSize)
         {
             return await BenchmarkTestHelper.CallApiMethod<T>(
                 _httpClient,
                 _postMethodPrefix,
-                GetFolderPath(subfolder),
+                testFileSize,
                 isNew: false);
         }
 
-        public async Task<T> TestNewWay<T>(string subfolder)
+        public async Task<T> TestNewWay<T>(TestFileSize testFileSize)
         {
             return await BenchmarkTestHelper.CallApiMethod<T>(
                 _httpClient,
                 _postMethodPrefix,
-                GetFolderPath(subfolder),
+                testFileSize,
                 isNew: true);
-        }
-
-        private string GetFolderPath(string subfolder)
-        {
-            return Path.Combine(FolderNames.BaseFolderName, subfolder);
         }
     }
 }

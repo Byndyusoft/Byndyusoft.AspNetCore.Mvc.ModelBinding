@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Byndyusoft.IntegrationTests;
+using PerformanceTests.Files;
 
 namespace PerformanceTests.Helpers
 {
@@ -15,15 +15,13 @@ namespace PerformanceTests.Helpers
             return apiFixture.CreateClient();
         }
 
-        public static string GetDefaultFolderBasePath() => "D:\\PerformanceTestFiles";
-
         public static async Task<T> CallApiMethod<T>(
             HttpClient httpClient, 
-            string postMethodPrefix, 
-            string folderPath,
+            string postMethodPrefix,
+            TestFileSize testFileSize,
             bool isNew)
         {
-            using var multipartFormDataContent = GetMultipartFormDataContent(folderPath);
+            using var multipartFormDataContent = GetMultipartFormDataContent(testFileSize);
             var postMethodSuffix = isNew ? "New" : "Old";
             var postMethodName = $"{postMethodPrefix}{postMethodSuffix}";
             using var httpResponseMessage = await httpClient.PostAsync(postMethodName, multipartFormDataContent);
@@ -31,7 +29,7 @@ namespace PerformanceTests.Helpers
             return result!;
         }
 
-        private static MultipartFormDataContent GetMultipartFormDataContent(string folderPath)
+        private static MultipartFormDataContent GetMultipartFormDataContent(TestFileSize testFileSize)
         {
             var multipartFormDataContent = new MultipartFormDataContent
             {
@@ -39,16 +37,23 @@ namespace PerformanceTests.Helpers
                 { new StringContent("35"), "Age" }
             };
 
-            foreach (var (fileName, content) in CreateStreamContents(folderPath))
-                multipartFormDataContent.Add(content, "Files", fileName);
+            foreach (var testFileInfo in FileGenerator.GetTestFiles(testFileSize))
+            {
+                var streamContent = CreateStreamContent(testFileInfo.Content);
+                multipartFormDataContent.Add(streamContent, "Files", testFileInfo.FileName);
+            }
+
             return multipartFormDataContent;
         }
 
-        private static IEnumerable<(string FileName, StreamContent Content)> CreateStreamContents(string folderPath)
+        public static StreamContent CreateStreamContent(byte[] fileContent)
         {
-            var directoryInfo = new DirectoryInfo(folderPath);
-            foreach (var fileInfo in directoryInfo.EnumerateFiles())
-                yield return (fileInfo.Name, TestHelper.CreateStreamContentFromFilePath(fileInfo.FullName));
+            var memoryStream = new MemoryStream(fileContent);
+            var streamContent = new StreamContent(memoryStream);
+
+            streamContent.Headers.ContentLength = fileContent.Length;
+
+            return streamContent;
         }
     }
 }

@@ -20,17 +20,6 @@ namespace Byndyusoft.IntegrationTests
             return streamContent;
         }
 
-        public static StreamContent CreateStreamContentFromFilePath(string filePath)
-        {
-            var fileInfo = new FileInfo(filePath);
-            var fileStream = fileInfo.OpenRead();
-
-            var streamContent = new StreamContent(fileStream);
-            streamContent.Headers.ContentLength = fileInfo.Length;
-
-            return streamContent;
-        }
-
         public static async Task<byte[]> ReadFileBytesAsync(string fileName)
         {
             return await File.ReadAllBytesAsync(GetFilePath(fileName));
