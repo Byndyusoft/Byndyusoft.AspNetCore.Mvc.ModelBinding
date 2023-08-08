@@ -15,7 +15,7 @@ namespace PerformanceTests.Helpers
             return apiFixture.CreateClient();
         }
 
-        public static string GetDefaultFolderPath() => "D:\\PerformanceTestFiles";
+        public static string GetDefaultFolderBasePath() => "D:\\PerformanceTestFiles";
 
         public static async Task<T> CallApiMethod<T>(
             HttpClient httpClient, 

@@ -5,17 +5,17 @@ using PerformanceTests.Helpers;
 
 namespace PerformanceTests.Tests
 {
-    public class HashTest
+    public class UploadToStorageTest
     {
         private BenchmarkTestInstance _benchmarkTestInstance = default!;
 
         [GlobalSetup]
         public void Setup()
         {
-            _benchmarkTestInstance = new BenchmarkTestInstance("Files/Hash");
+            _benchmarkTestInstance = new BenchmarkTestInstance("Files/Upload");
         }
 
-        [Params(Subfolders.Small, Subfolders.Big)] 
+        [Params(Subfolders.Small, Subfolders.Big)]
         public string Subfolder = default!;
 
         [Benchmark]
