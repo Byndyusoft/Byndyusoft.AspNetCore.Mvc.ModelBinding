@@ -6,9 +6,22 @@ namespace Byndyusoft.IntegrationTests
 {
     public class TestHelper
     {
+        private const string TestFiles = "TestFiles";
+
         public static StreamContent CreateStreamContent(string fileName)
         {
             var filePath = GetFilePath(fileName);
+            var fileInfo = new FileInfo(filePath);
+            var fileStream = fileInfo.OpenRead();
+
+            var streamContent = new StreamContent(fileStream);
+            streamContent.Headers.ContentLength = fileInfo.Length;
+
+            return streamContent;
+        }
+
+        public static StreamContent CreateStreamContentFromFilePath(string filePath)
+        {
             var fileInfo = new FileInfo(filePath);
             var fileStream = fileInfo.OpenRead();
 
@@ -25,7 +38,7 @@ namespace Byndyusoft.IntegrationTests
 
         private static string GetFilePath(string fileName)
         {
-            return Path.Combine("TestFiles", fileName);
+            return Path.Combine(TestFiles, fileName);
         }
     }
 }
