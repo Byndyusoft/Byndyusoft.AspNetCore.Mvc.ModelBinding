@@ -15,7 +15,7 @@ namespace PerformanceTests.Tests
             _benchmarkTestInstance = new BenchmarkTestInstance("Files/Save");
         }
 
-        [Params(Subfolders.Small, Subfolders.Big)]
+        [Params(FolderNames.Small, FolderNames.Big, FolderNames.Large)]
         public string Subfolder = default!;
 
         [Benchmark]

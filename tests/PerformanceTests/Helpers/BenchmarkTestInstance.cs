@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
+using PerformanceTests.Consts;
 
 namespace PerformanceTests.Helpers
 {
@@ -8,7 +9,6 @@ namespace PerformanceTests.Helpers
     {
         private readonly HttpClient _httpClient;
         private readonly string _postMethodPrefix;
-        private readonly string _folderBasePath = BenchmarkTestHelper.GetDefaultFolderBasePath();
 
         public BenchmarkTestInstance(string postMethodPrefix)
         {
@@ -36,7 +36,7 @@ namespace PerformanceTests.Helpers
 
         private string GetFolderPath(string subfolder)
         {
-            return Path.Combine(_folderBasePath, subfolder);
+            return Path.Combine(FolderNames.BaseFolderName, subfolder);
         }
     }
 }

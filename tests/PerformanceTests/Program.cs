@@ -1,5 +1,9 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using BenchmarkDotNet.Running;
+using PerformanceTests;
+using PerformanceTests.Tests;
 
-BenchmarkRunner.Run(typeof(Program).Assembly, args: args);
+BenchmarkRunner.Run<HashTest>();
+//BenchmarkRunner.Run<SaveToDiskTest>();
+//BenchmarkRunner.Run<UploadToStorageTest>();
