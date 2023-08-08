@@ -28,7 +28,7 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Extensions
 
             var boundary = request.GetMultipartBoundary();
             var reader = new MultipartReader(boundary, request.Body);
-
+            
             var section = await reader.ReadNextSectionAsync(cancellationToken);
 
             var formAccumulator = new KeyValueAccumulator();

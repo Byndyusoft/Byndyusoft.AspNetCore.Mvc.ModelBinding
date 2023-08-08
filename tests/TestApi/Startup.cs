@@ -22,7 +22,9 @@ namespace Byndyusoft.TestApi
             services.AddControllers(o => o.AddFormStreamedFileCollectionBinder());
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
-            services.AddSingleton<FileService>();
+            services
+                .AddSingleton<FileService>()
+                .AddSingleton<StorageService>();
             services.Configure<SaveFileSettings>(Configuration.GetSection(nameof(SaveFileSettings)));
         }
 

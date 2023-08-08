@@ -122,6 +122,7 @@ namespace Byndyusoft.TestApi.Controllers
 
             return resultDtos.ToArray();
         }
+
         [HttpPost("HashOld")]
         [RequestSizeLimit(int.MaxValue)]
         [RequestFormLimits(MultipartBodyLengthLimit = int.MaxValue)]
@@ -166,6 +167,59 @@ namespace Byndyusoft.TestApi.Controllers
             _logger.LogInformation("{OperationName} took {Elapsed}", nameof(HashNewWay), stopwatch.Elapsed);
 
             return hashes.ToArray();
+        }
+
+        [HttpPost("UploadOld")]
+        [RequestSizeLimit(int.MaxValue)]
+        [RequestFormLimits(MultipartBodyLengthLimit = int.MaxValue)]
+        public async Task<ActionResult<string[]>> UploadWay([FromForm] OldRequestDto requestDto, CancellationToken cancellationToken)
+        {
+            var stopwatch = Stopwatch.StartNew();
+
+            var objectNames = new List<string>();
+
+            foreach (var file in requestDto.Files)
+            {
+                await using var stream = file.OpenReadStream();
+                var objectName = await _fileService.UploadToStorageAsync(stream, file.FileName, file.Length, cancellationToken);
+                objectNames.Add(objectName);
+            }
+
+            stopwatch.Stop();
+            _logger.LogInformation("{OperationName} took {Elapsed}", nameof(UploadWay), stopwatch.Elapsed);
+
+            return objectNames.ToArray();
+        }
+
+        [HttpPost("UploadNew")]
+        [RequestSizeLimit(long.MaxValue)]
+        [SetFormStreamedDataValueProvider]
+        public async Task<ActionResult<string[]>> UploadNewWay(
+            [FromFormStreamedData] NewRequestDto requestDto,
+            CancellationToken cancellationToken)
+        {
+            var stopwatch = Stopwatch.StartNew();
+
+            var objectNames = new List<string>();
+
+            await foreach (var file in requestDto.StreamedFiles.WithCancellation(cancellationToken))
+            {
+                if (file.ContentLength is null)
+                    return BadRequest("Content Length is required");
+
+                await using var stream = file.OpenReadStream();
+                var objectName = await _fileService.UploadToStorageAsync(
+                    stream, 
+                    file.FileName,
+                    file.ContentLength.Value, 
+                    cancellationToken);
+                objectNames.Add(objectName);
+            }
+
+            stopwatch.Stop();
+            _logger.LogInformation("{OperationName} took {Elapsed}", nameof(UploadNewWay), stopwatch.Elapsed);
+
+            return objectNames.ToArray();
         }
     }
 }
