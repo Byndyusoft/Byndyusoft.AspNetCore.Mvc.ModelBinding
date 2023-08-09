@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -14,7 +15,8 @@ namespace PerformanceTests.Helpers
 
         public BenchmarkTestInstance(string postMethodPrefix)
         {
-            _httpClient = GetHttpClient();
+            _httpClient = LaunchApiAndGetHttpClient();
+            _httpClient.Timeout = TimeSpan.FromMinutes(10);
             _postMethodPrefix = postMethodPrefix;
         }
         
@@ -36,7 +38,14 @@ namespace PerformanceTests.Helpers
                 isNew: true);
         }
 
-        public static HttpClient GetHttpClient()
+        public static HttpClient GetAlreadyLaunchedApiHttpClient()
+        {
+            var httpClient = new HttpClient();
+            httpClient.BaseAddress = new Uri("http://localhost:5000");
+            return httpClient;
+        }
+
+        public static HttpClient LaunchApiAndGetHttpClient()
         {
             var apiFixture = new ApiFixture();
             return apiFixture.CreateClient();

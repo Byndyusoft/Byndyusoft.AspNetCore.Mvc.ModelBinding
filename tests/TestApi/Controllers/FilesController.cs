@@ -172,7 +172,7 @@ namespace Byndyusoft.TestApi.Controllers
         [HttpPost("UploadOld")]
         [RequestSizeLimit(int.MaxValue)]
         [RequestFormLimits(MultipartBodyLengthLimit = int.MaxValue)]
-        public async Task<ActionResult<string[]>> UploadWay([FromForm] OldRequestDto requestDto, CancellationToken cancellationToken)
+        public async Task<ActionResult<string[]>> UploadOldWay([FromForm] OldRequestDto requestDto, CancellationToken cancellationToken)
         {
             var stopwatch = Stopwatch.StartNew();
 
@@ -186,7 +186,7 @@ namespace Byndyusoft.TestApi.Controllers
             }
 
             stopwatch.Stop();
-            _logger.LogInformation("{OperationName} took {Elapsed}", nameof(UploadWay), stopwatch.Elapsed);
+            _logger.LogInformation("{OperationName} took {Elapsed}", nameof(UploadOldWay), stopwatch.Elapsed);
 
             return objectNames.ToArray();
         }

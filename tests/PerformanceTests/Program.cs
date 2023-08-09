@@ -5,4 +5,4 @@ using PerformanceTests.Tests;
 
 BenchmarkRunner.Run<HashTest>();
 BenchmarkRunner.Run<SaveToDiskTest>();
-//BenchmarkRunner.Run<UploadToStorageTest>();
+BenchmarkRunner.Run<UploadToStorageTest>();

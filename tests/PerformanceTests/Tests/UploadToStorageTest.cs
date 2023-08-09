@@ -6,7 +6,7 @@ using PerformanceTests.Helpers;
 
 namespace PerformanceTests.Tests
 {
-    [SimpleJob(RunStrategy.Throughput)]
+    [SimpleJob(RunStrategy.Monitoring)]
     [AllStatisticsColumn]
     public class UploadToStorageTest
     {
@@ -23,13 +23,13 @@ namespace PerformanceTests.Tests
         public TestFileSize TestFileSize = TestFileSize.None;
 
         [Benchmark]
-        public async Task<string[]> HashOld()
+        public async Task<string[]> UploadOld()
         {
             return await _benchmarkTestInstance.TestOldWay<string[]>(TestFileSize);
         }
 
         [Benchmark]
-        public async Task<string[]> HashNew()
+        public async Task<string[]> UploadNew()
         {
             return await _benchmarkTestInstance.TestNewWay<string[]>(TestFileSize);
         }

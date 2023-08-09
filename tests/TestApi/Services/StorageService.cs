@@ -26,6 +26,7 @@ namespace Byndyusoft.TestApi.Services
                 .WithEndpoint(Endpoint)
                 .WithCredentials(AccessKey, SecretKey)
                 .WithSSL(false)
+                .WithTimeout(1000 * 60 * 60)
                 .Build();
         }
 

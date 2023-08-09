@@ -24,13 +24,13 @@ namespace PerformanceTests.Tests
         public TestFileSize TestFileSize = TestFileSize.None;
 
         [Benchmark]
-        public async Task<SaveResultDto> HashOld()
+        public async Task<SaveResultDto> SaveOld()
         {
             return await _benchmarkTestInstance.TestOldWay<SaveResultDto>(TestFileSize);
         }
 
         [Benchmark]
-        public async Task<SaveResultDto> HashNew()
+        public async Task<SaveResultDto> SaveNew()
         {
             return await _benchmarkTestInstance.TestNewWay<SaveResultDto>(TestFileSize);
         }
