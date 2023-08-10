@@ -6,9 +6,9 @@ This package allows you to read form data values and files. Files streams are no
 
 Default asp net core behaviour reads all form contents including files during model binding process. File streams are fully drained to the end and their contents are saved in memory and/or disk before any user custom code.
 
-This behaviour is not convenient when large files are sent and we want to treat them as streams. 
+This behaviour is not convenient when we want to treat files as streams. 
 Possible cases:
-- You create S3 gateway service and want to upload files to S3 as streams.
+- You process file streams consequentially. For example, you want to calculate file hash only.
 - You want to read form string values first and validate its data before reading any files' content.
 
 This package allows you to use default binding model except for files that will be available to user code later after model binding process.
