@@ -175,6 +175,9 @@ All these values can be changed in [FileGeneratorSetting](tests/PerformanceTests
 2. Standard (old) behaviour is faster if files streams are sent to S3. It is much faster to read all content before sending it to next service as another stream. [BufferedStream](https://learn.microsoft.com/en-us/dotnet/api/system.io.bufferedstream) can boost new behaviour speed but it will not be faster anyway.
 3. Use new behaviour only if you need to process files` content in high performance method or if you do not have enough resources to store incoming files' content of all simultaneous requests in memory and on disk.
 
+Api site, performance test console application and Mino S3 server storage were launched on one machine. So these results may not reflect production environment performance.
+You are welcome to update them if performance is measured in production (or at least preproduction) environment.
+
 # Contributing
 
 To contribute, you will need to setup your local environment, see [prerequisites](#prerequisites). For the contribution and workflow guide, see [package development lifecycle](#package-development-lifecycle).
