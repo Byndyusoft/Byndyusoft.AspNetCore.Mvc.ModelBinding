@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>PerformanceTests.Tests.HashTest-20230809-171135</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet v0.13.7, Windows 10 (10.0.19045.2965/22H2/2022Update)
+Intel Core i5-10400 CPU 2.90GHz, 1 CPU, 12 logical and 6 physical cores
+.NET SDK 7.0.201
+  [Host]     : .NET 6.0.14 (6.0.1423.7309), X64 RyuJIT AVX2
+  Job-VCOPDG : .NET 6.0.14 (6.0.1423.7309), X64 RyuJIT AVX2
+</code></pre>
+<pre><code>RunStrategy=Throughput  
+</code></pre>
+
+<table>
+<thead><tr><th>Method</th><th>TestFileSize</th><th>  Mean</th><th>Error</th><th>StdDev</th><th>StdErr</th><th>  Min</th><th>   Q1</th><th>Median</th><th>    Q3</th><th>   Max</th><th>Op/s</th>
+</tr>
+</thead><tbody><tr><td>HashOld</td><td>Small</td><td>41.65 ms</td><td>0.822 ms</td><td>1.698 ms</td><td>0.236 ms</td><td>37.15 ms</td><td>40.63 ms</td><td>41.64 ms</td><td>42.87 ms</td><td>45.76 ms</td><td>24.0085</td>
+</tr><tr><td>HashNew</td><td>Small</td><td>15.39 ms</td><td>0.058 ms</td><td>0.045 ms</td><td>0.013 ms</td><td>15.32 ms</td><td>15.36 ms</td><td>15.39 ms</td><td>15.41 ms</td><td>15.47 ms</td><td>64.9860</td>
+</tr><tr><td>HashOld</td><td>Big</td><td>1,259.90 ms</td><td>24.976 ms</td><td>26.724 ms</td><td>6.299 ms</td><td>1,225.96 ms</td><td>1,234.02 ms</td><td>1,260.86 ms</td><td>1,276.49 ms</td><td>1,325.39 ms</td><td>0.7937</td>
+</tr><tr><td>HashNew</td><td>Big</td><td>485.09 ms</td><td>10.955 ms</td><td>30.899 ms</td><td>3.221 ms</td><td>445.91 ms</td><td>457.12 ms</td><td>478.86 ms</td><td>508.16 ms</td><td>578.05 ms</td><td>2.0615</td>
+</tr><tr><td>HashOld</td><td>Large</td><td>10,082.17 ms</td><td>176.127 ms</td><td>164.749 ms</td><td>42.538 ms</td><td>9,810.36 ms</td><td>9,976.98 ms</td><td>10,071.16 ms</td><td>10,171.55 ms</td><td>10,456.53 ms</td><td>0.0992</td>
+</tr><tr><td>HashNew</td><td>Large</td><td>2,469.44 ms</td><td>44.506 ms</td><td>110.007 ms</td><td>12.964 ms</td><td>2,312.81 ms</td><td>2,385.46 ms</td><td>2,439.65 ms</td><td>2,527.09 ms</td><td>2,781.43 ms</td><td>0.4049</td>
+</tr></tbody></table>
+</body>
+</html>

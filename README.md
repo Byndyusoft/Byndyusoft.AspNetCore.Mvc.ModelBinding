@@ -113,6 +113,10 @@ public class FilesController : ControllerBase
 }
 ```
 
+# Benchmarking
+
+BenchmarkNet was used to measure form streamed file performance.
+
 # Contributing
 
 To contribute, you will need to setup your local environment, see [prerequisites](#prerequisites). For the contribution and workflow guide, see [package development lifecycle](#package-development-lifecycle).

@@ -27,7 +27,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegrationTests", "tests\I
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestApi", "tests\TestApi\TestApi.csproj", "{72D6941F-2859-4347-AA16-6411A38ACE35}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PerformanceTests", "tests\PerformanceTests\PerformanceTests.csproj", "{3C6B4A8F-9C87-4EF6-BFC5-DE05B44242FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PerformanceTests", "tests\PerformanceTests\PerformanceTests.csproj", "{3C6B4A8F-9C87-4EF6-BFC5-DE05B44242FD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Benchmark Artifacts", "Benchmark Artifacts", "{1900C2B7-344B-486B-A2D6-297E2C92CE9E}"
+	ProjectSection(SolutionItems) = preProject
+		tests\BenchmarkResults\Dotnet Benchmark\PerformanceTests.Tests.HashTest-report-github.md = tests\BenchmarkResults\Dotnet Benchmark\PerformanceTests.Tests.HashTest-report-github.md
+		tests\BenchmarkResults\Dotnet Benchmark\PerformanceTests.Tests.SaveToDiskTest-report-github.md = tests\BenchmarkResults\Dotnet Benchmark\PerformanceTests.Tests.SaveToDiskTest-report-github.md
+		tests\BenchmarkResults\Dotnet Benchmark\PerformanceTests.Tests.UploadToStorageTest-report-github.md = tests\BenchmarkResults\Dotnet Benchmark\PerformanceTests.Tests.UploadToStorageTest-report-github.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -62,6 +69,7 @@ Global
 		{574D74ED-1FF9-400B-9810-38C991941D43} = {CD2527C5-D6B4-4E6E-A878-FFE273B47511}
 		{72D6941F-2859-4347-AA16-6411A38ACE35} = {CD2527C5-D6B4-4E6E-A878-FFE273B47511}
 		{3C6B4A8F-9C87-4EF6-BFC5-DE05B44242FD} = {CD2527C5-D6B4-4E6E-A878-FFE273B47511}
+		{1900C2B7-344B-486B-A2D6-297E2C92CE9E} = {27E75EBF-ED9E-4151-9606-AA837FB9BBAF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C5A3EF0C-96D2-472C-A367-AB34B065DC56}

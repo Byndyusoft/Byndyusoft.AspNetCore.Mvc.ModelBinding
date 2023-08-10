@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>PerformanceTests.Tests.SaveToDiskTest-20230809-172143</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet v0.13.7, Windows 10 (10.0.19045.2965/22H2/2022Update)
+Intel Core i5-10400 CPU 2.90GHz, 1 CPU, 12 logical and 6 physical cores
+.NET SDK 7.0.201
+  [Host]     : .NET 6.0.14 (6.0.1423.7309), X64 RyuJIT AVX2
+  Job-VCOPDG : .NET 6.0.14 (6.0.1423.7309), X64 RyuJIT AVX2
+</code></pre>
+<pre><code>RunStrategy=Throughput  
+</code></pre>
+
+<table>
+<thead><tr><th>Method</th><th>TestFileSize</th><th> Mean</th><th>Error</th><th>StdDev</th><th>StdErr</th><th>  Min</th><th>   Q1</th><th>Median</th><th>   Q3</th><th>   Max</th><th>Op/s</th>
+</tr>
+</thead><tbody><tr><td>SaveOld</td><td>Small</td><td>24.87 ms</td><td>0.493 ms</td><td>1.102 ms</td><td>0.142 ms</td><td>23.06 ms</td><td>24.02 ms</td><td>24.78 ms</td><td>25.56 ms</td><td>27.72 ms</td><td>40.2035</td>
+</tr><tr><td>SaveNew</td><td>Small</td><td>14.91 ms</td><td>0.107 ms</td><td>0.083 ms</td><td>0.024 ms</td><td>14.74 ms</td><td>14.86 ms</td><td>14.93 ms</td><td>14.97 ms</td><td>15.03 ms</td><td>67.0614</td>
+</tr><tr><td>SaveOld</td><td>Big</td><td>836.72 ms</td><td>39.259 ms</td><td>113.272 ms</td><td>11.561 ms</td><td>707.48 ms</td><td>740.13 ms</td><td>823.94 ms</td><td>906.19 ms</td><td>1,215.96 ms</td><td>1.1951</td>
+</tr><tr><td>SaveNew</td><td>Big</td><td>501.68 ms</td><td>11.450 ms</td><td>32.669 ms</td><td>3.370 ms</td><td>461.28 ms</td><td>475.44 ms</td><td>493.28 ms</td><td>518.39 ms</td><td>590.09 ms</td><td>1.9933</td>
+</tr><tr><td>SaveOld</td><td>Large</td><td>8,952.73 ms</td><td>178.932 ms</td><td>513.388 ms</td><td>52.673 ms</td><td>8,244.20 ms</td><td>8,506.87 ms</td><td>8,903.40 ms</td><td>9,292.08 ms</td><td>10,469.41 ms</td><td>0.1117</td>
+</tr><tr><td>SaveNew</td><td>Large</td><td>7,913.74 ms</td><td>139.790 ms</td><td>149.574 ms</td><td>35.255 ms</td><td>7,530.49 ms</td><td>7,830.82 ms</td><td>7,928.19 ms</td><td>8,014.54 ms</td><td>8,151.81 ms</td><td>0.1264</td>
+</tr></tbody></table>
+</body>
+</html>
