@@ -23,6 +23,8 @@ It is recommended to use standard behaviour if both conditions are met:
 1. You don't need streaming.
 2. You have enough resources to store incoming files' content of all simultaneous requests in memory and on disk.
 
+In [Benchmarking](README.md#Benchmarking) section you can see that new behaviour is faster in high performance stream processing use cases. 
+
 ## Implementation
 
 The implementation is based on Microsoft [suggestion](https://learn.microsoft.com/en-us/aspnet/core/mvc/models/file-uploads?view=aspnetcore-7.0#upload-large-files-with-streaming) with addition:
@@ -115,7 +117,63 @@ public class FilesController : ControllerBase
 
 # Benchmarking
 
-BenchmarkNet was used to measure form streamed file performance.
+## Use cases and implementation
+
+BenchmarkNet was used to measure new behaviour performance.
+3 use cases were tested:
+1. File content hashing.
+2. Saving to disk.
+3. Uploading to localhost Minio S3 storage.
+
+All three cases were implemented in [TestApi](tests/TestApi) project. Performance tests were implemented in (PerformanceTests)[tests/PerformanceTests] project.
+
+There were used three values for TestFileSize parameter:
+1. Small - API receives 5 1Mb-sized generated files.
+2. Big - API receives 2 100Mb-sized generated files.
+3. Small - API receives 1 1Gb-sized generated files.
+
+All these values can be changed in [FileGeneratorSetting](tests/PerformanceTests/Files/FileGeneratorSetting.cs) class.
+
+## Results
+
+### File content hashing use case
+
+|  Method | TestFileSize |         Mean |      Error |     StdDev |    StdErr |
+|-------- |------------- |-------------:|-----------:|-----------:|----------:|
+| **HashOld** |        **Small** |     **41.65 ms** |   **0.822 ms** |   **1.698 ms** |  **0.236 ms** |
+| HashNew |        Small |     15.39 ms |   0.058 ms |   0.045 ms |  0.013 ms |
+| **HashOld** |          **Big** |  **1,259.90 ms** |  **24.976 ms** |  **26.724 ms** |  **6.299 ms** |
+| HashNew |          Big |    485.09 ms |  10.955 ms |  30.899 ms |  3.221 ms |
+| **HashOld** |        **Large** | **10,082.17 ms** | **176.127 ms** | **164.749 ms** | **42.538 ms** |
+| HashNew |        Large |  2,469.44 ms |  44.506 ms | 110.007 ms | 12.964 ms |
+
+### Saving to disk use case
+
+|  Method | TestFileSize |        Mean |      Error |     StdDev |    StdErr |
+|-------- |------------- |------------:|-----------:|-----------:|----------:|
+| **SaveOld** |        **Small** |    **24.87 ms** |   **0.493 ms** |   **1.102 ms** |  **0.142 ms** |
+| SaveNew |        Small |    14.91 ms |   0.107 ms |   0.083 ms |  0.024 ms |
+| **SaveOld** |          **Big** |   **836.72 ms** |  **39.259 ms** | **113.272 ms** | **11.561 ms** |
+| SaveNew |          Big |   501.68 ms |  11.450 ms |  32.669 ms |  3.370 ms |
+| **SaveOld** |        **Large** | **8,952.73 ms** | **178.932 ms** | **513.388 ms** | **52.673 ms** |
+| SaveNew |        Large | 7,913.74 ms | 139.790 ms | 149.574 ms | 35.255 ms |
+
+### Uploading to localhost Minio S3 storage use case
+
+|    Method | TestFileSize |         Mean |       Error |      StdDev |      StdErr |
+|---------- |------------- |-------------:|------------:|------------:|------------:|
+| **UploadOld** |        **Small** |     **184.0 ms** |    **62.66 ms** |    **41.45 ms** |    **13.11 ms** |
+| UploadNew |        Small |     446.3 ms |   140.33 ms |    92.82 ms |    29.35 ms |
+| **UploadOld** |          **Big** |   **5,068.9 ms** |   **653.25 ms** |   **432.08 ms** |   **136.64 ms** |
+| UploadNew |          Big |  51,659.3 ms | 1,413.90 ms |   935.21 ms |   295.74 ms |
+| **UploadOld** |        **Large** |  **26,848.8 ms** | **1,585.32 ms** | **1,048.59 ms** |   **331.59 ms** |
+| UploadNew |        Large | 259,196.0 ms | 7,761.91 ms | 5,134.02 ms | 1,623.52 ms |
+
+## Summary
+
+1. New behaviour is faster if file contents are being read rapidly. It can be observed in first two use cases.
+2. Standard (old) behaviour is faster if files streams are sent to S3. It is much faster to read all content before sending it to next service as another stream. [BufferedStream](https://learn.microsoft.com/en-us/dotnet/api/system.io.bufferedstream) can boost new behaviour speed but it will not be faster anyway.
+3. Use new behaviour only if you need to process files` content in high performance method or if you do not have enough resources to store incoming files' content of all simultaneous requests in memory and on disk.
 
 # Contributing
 
