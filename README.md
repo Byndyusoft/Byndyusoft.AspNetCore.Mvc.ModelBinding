@@ -23,7 +23,7 @@ It is recommended to use standard behaviour if both conditions are met:
 1. You don't need streaming.
 2. You have enough resources to store incoming files' content of all simultaneous requests in memory and on disk.
 
-In [Benchmarking](README.md#Benchmarking) section you can see that new behaviour is faster in high performance stream processing use cases. 
+In [Benchmarking](README.md#Benchmarking) section you can see that new behaviour is faster in high performance stream processing use cases. It is strongly recommened to measure performance for your use case before using it in production environment.
 
 ## Implementation
 
