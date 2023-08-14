@@ -41,7 +41,6 @@ namespace Byndyusoft.TestApi.Services
 
         public async Task<string> CalculateHashAsync(Stream stream, CancellationToken cancellationToken)
         {
-            await using var bufferedStream = new BufferedStream(stream, 10 * 1024 * 1024);
             var md5 = MD5.Create();
             var hash = await md5.ComputeHashAsync(stream, cancellationToken);
             var base64String = Convert.ToBase64String(hash);
