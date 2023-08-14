@@ -187,7 +187,7 @@ To contribute, you will need to setup your local environment, see [prerequisites
 Make sure you have installed all of the following prerequisites on your development machine:
 
 - Git - [Download & Install Git](https://git-scm.com/downloads). OSX and Linux machines typically have this already installed.
-- .NET (.net version) - [Download & Install .NET](https://dotnet.microsoft.com/en-us/download/dotnet/).
+- .NET Core 3.1 or higher - [Download & Install .NET Core 3.1](https://dotnet.microsoft.com/en-us/download/dotnet/3.1).
 
 ## Package development lifecycle
 
