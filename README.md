@@ -33,7 +33,7 @@ The implementation is based on Microsoft [suggestion](https://learn.microsoft.co
 - Model binding of property or parameter of type [FormStreamedFileCollection](src/FormStreamedData/Values/FormStreamedFileCollection.cs) is introduced. This type allows reading file contents consequentially by user code after model binding process.
 - You can read form data with [ReadFormStreamedDataAsync](src/FormStreamedData/Extensions/FormStreamedDataExtensions.cs) extensions method of HttpRequest.
 
-## Requirements
+## New behaviour usage requirements
 
 - Always provide form string values first.
 - Always provide form file values last.
@@ -130,7 +130,7 @@ All three cases were implemented in [TestApi](tests/TestApi) project. Performanc
 There were used three values for TestFileSize parameter:
 1. Small - API receives 5 1Mb-sized generated files.
 2. Big - API receives 2 100Mb-sized generated files.
-3. Small - API receives 1 1Gb-sized generated files.
+3. Large - API receives 1 1Gb-sized generated files.
 
 All these values can be changed in [FileGeneratorSetting](tests/PerformanceTests/Files/FileGeneratorSetting.cs) class.
 
