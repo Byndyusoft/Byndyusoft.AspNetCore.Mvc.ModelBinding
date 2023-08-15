@@ -40,7 +40,7 @@ namespace PerformanceTests.Files
         private static TestFileInfo GenerateFile(string fileName, int sizeInMb)
         {
             const int bytesInMb = 1024 * 1024;
-            byte[] data = new byte[sizeInMb * bytesInMb];
+            var data = new byte[sizeInMb * bytesInMb];
             using var randomNumberGenerator = RandomNumberGenerator.Create();
             randomNumberGenerator.GetBytes(data);
 
