@@ -1,10 +1,10 @@
 # Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData [![Nuget](https://img.shields.io/nuget/v/Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.svg)](https://www.nuget.org/packages/Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData/)[![Downloads](https://img.shields.io/nuget/dt/Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.svg)](https://www.nuget.org/packages/Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData/)
 
-This package allows you to read form data values and files. Files streams are not read in binding model process and are provided to be used in user code.
+This package allows you to read Form Data values and files. Files streams are not read in binding model process and are provided to be used in user code.
 
 ## How it works
 
-Default asp net core behaviour reads all form contents including files during model binding process. File streams are fully drained to the end and their contents are saved in memory and/or disk before any user custom code.
+Default ASP .NET Core behaviour reads all form contents including files during model binding process. File streams are fully drained to the end and their contents are saved in memory and/or disk before any user custom code.
 
 This behaviour is not convenient when we want to treat files as streams. 
 Possible cases:
@@ -31,7 +31,7 @@ The implementation is based on Microsoft [suggestion](https://learn.microsoft.co
 - DisableFormValueModelBindingAttribute is presented as [SetFormStreamedDataValueProviderAttribute](src/FormStreamedData/Attributes/SetFormStreamedDataValueProviderAttribute.cs) which actually replaces value provider with new [provider](src/FormStreamedData/Binders/FormStreamedDataValueProvider.cs).
 - Model binding is enabled. It means that all standard and custom binding to your properties of specific types from string values is supported.
 - Model binding of property or parameter of type [FormStreamedFileCollection](src/FormStreamedData/Values/FormStreamedFileCollection.cs) is introduced. This type allows reading file contents consequentially by user code after model binding process.
-- You can read form data with [ReadFormStreamedDataAsync](src/FormStreamedData/Extensions/FormStreamedDataExtensions.cs) extensions method of HttpRequest.
+- You can read Form Data with [ReadFormStreamedDataAsync](src/FormStreamedData/Extensions/FormStreamedDataExtensions.cs) extensions method of HttpRequest.
 
 ## New behaviour usage requirements
 
@@ -56,7 +56,7 @@ Register model binder for [FormStreamedFileCollection](src/FormStreamedData/Valu
 ```
 
 Set [SetFormStreamedDataValueProviderAttribute](src/FormStreamedData/Attributes/SetFormStreamedDataValueProviderAttribute.cs) for controller actions where file streams should be read.
-This will replace default value providers for form data with [FormStreamedDataValueProvider](src/FormStreamedData/Binders/FormStreamedDataValueProvider.cs).
+This will replace default value providers for Form Data with [FormStreamedDataValueProvider](src/FormStreamedData/Binders/FormStreamedDataValueProvider.cs).
 
 Set [FromFormStreamedDataAttribute](src/FormStreamedData/Attributes/FromFormStreamedDataAttribute.cs) for action parameters or request object properties that should be bound to form values.
 To read files' streams use only one property or one parameter of type [FormStreamedFileCollection](src/FormStreamedData/Values/FormStreamedFileCollection.cs).
