@@ -16,7 +16,7 @@
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 		
-		<RepositoryUrl>https://github.com/Byndyusoft/NetGithubActionsNugetTemplate</RepositoryUrl>
+		<RepositoryUrl>https://github.com/Byndyusoft/Byndyusoft.AspNetCore.Mvc.ModelBinding</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		
 		<PackageIcon>icon.png</PackageIcon>
