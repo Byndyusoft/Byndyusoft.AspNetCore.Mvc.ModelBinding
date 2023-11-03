@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>PerformanceTests.Tests.UploadToStorageTest-20230809-183900</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet v0.13.7, Windows 10 (10.0.19045.2965/22H2/2022Update)
+Intel Core i5-10400 CPU 2.90GHz, 1 CPU, 12 logical and 6 physical cores
+.NET SDK 7.0.201
+  [Host]     : .NET 6.0.14 (6.0.1423.7309), X64 RyuJIT AVX2
+  Job-XTOWBV : .NET 6.0.14 (6.0.1423.7309), X64 RyuJIT AVX2
+</code></pre>
+<pre><code>RunStrategy=Monitoring  
+</code></pre>
+
+<table>
+<thead><tr><th>Method</th><th>TestFileSize</th><th>  Mean</th><th>Error</th><th>StdDev</th><th>StdErr</th><th>   Min</th><th>    Q1</th><th>Median</th><th>    Q3</th><th>   Max</th><th>Op/s</th>
+</tr>
+</thead><tbody><tr><td>UploadOld</td><td>Small</td><td>184.0 ms</td><td>62.66 ms</td><td>41.45 ms</td><td>13.11 ms</td><td>138.0 ms</td><td>161.4 ms</td><td>180.6 ms</td><td>191.3 ms</td><td>287.9 ms</td><td>5.4356</td>
+</tr><tr><td>UploadNew</td><td>Small</td><td>446.3 ms</td><td>140.33 ms</td><td>92.82 ms</td><td>29.35 ms</td><td>271.6 ms</td><td>394.2 ms</td><td>466.9 ms</td><td>499.9 ms</td><td>573.6 ms</td><td>2.2407</td>
+</tr><tr><td>UploadOld</td><td>Big</td><td>5,068.9 ms</td><td>653.25 ms</td><td>432.08 ms</td><td>136.64 ms</td><td>4,641.3 ms</td><td>4,720.6 ms</td><td>4,938.1 ms</td><td>5,363.8 ms</td><td>5,956.8 ms</td><td>0.1973</td>
+</tr><tr><td>UploadNew</td><td>Big</td><td>51,659.3 ms</td><td>1,413.90 ms</td><td>935.21 ms</td><td>295.74 ms</td><td>50,411.8 ms</td><td>50,806.8 ms</td><td>51,665.2 ms</td><td>52,400.3 ms</td><td>53,003.5 ms</td><td>0.0194</td>
+</tr><tr><td>UploadOld</td><td>Large</td><td>26,848.8 ms</td><td>1,585.32 ms</td><td>1,048.59 ms</td><td>331.59 ms</td><td>25,180.1 ms</td><td>25,857.5 ms</td><td>27,389.5 ms</td><td>27,547.4 ms</td><td>28,005.5 ms</td><td>0.0372</td>
+</tr><tr><td>UploadNew</td><td>Large</td><td>259,196.0 ms</td><td>7,761.91 ms</td><td>5,134.02 ms</td><td>1,623.52 ms</td><td>251,472.8 ms</td><td>255,176.9 ms</td><td>259,538.1 ms</td><td>261,242.3 ms</td><td>268,141.2 ms</td><td>0.0039</td>
+</tr></tbody></table>
+</body>
+</html>
