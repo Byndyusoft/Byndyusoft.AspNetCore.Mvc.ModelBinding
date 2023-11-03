@@ -4,6 +4,9 @@
     <IsPackable>true</IsPackable>
     <AssemblyName>Byndyusoft.AspNetCore.Mvc.ModelBinding.$(MSBuildProjectName)</AssemblyName>
     <RootNamespace>Byndyusoft.AspNetCore.Mvc.ModelBinding.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <Description>
+      This package allows you to read Form Data values and files. Files streams are not read in binding model process and are provided to be used in user code.
+    </Description>
   </PropertyGroup>
   <ItemGroup>
     <None Include="..\..\README.md" Pack="true" PackagePath="\" />
