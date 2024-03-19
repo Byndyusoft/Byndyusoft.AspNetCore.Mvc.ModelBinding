@@ -155,6 +155,46 @@ namespace Byndyusoft.IntegrationTests.Tests
         }
 
         [Fact]
+        public async Task BindToModelWithSingleFile_FirstValuesThenFile_ModelIsBoundCorrectly_AndFileContentIsCorrect()
+        {
+            // Arrange
+            using var multipartFormDataContent = new MultipartFormDataContent
+            {
+                { new StringContent("Ivan"), "Name" },
+                { new StringContent("35"), "Age" }
+            };
+
+            using var streamContent = TestHelper.CreateStreamContent(FileNames.FirstFile);
+            multipartFormDataContent.Add(streamContent, FirstFileName, FileNames.FirstFile);
+
+            // Act
+            using var httpResponseMessage = await _httpClient.PostAsync("Files/SaveNewBySingleFile", multipartFormDataContent);
+
+            // Assert
+            httpResponseMessage.EnsureSuccessStatusCode();
+            var saveResultDto = await httpResponseMessage.Content.ReadFromJsonAsync<SaveResultWithSingleFileDto>();
+
+            var fileBytes = await TestHelper.ReadFileBytesAsync(FileNames.FirstFile);
+
+            var expectedResultDto = new SaveResultWithSingleFileDto
+            {
+                Name = "Ivan",
+                Age = 35,
+                File = new FileResultDto
+                {
+                    Name = FirstFileName,
+                    FileName = FileNames.FirstFile,
+                    ContentLength = fileBytes.Length
+                }
+            };
+            saveResultDto.Should().BeEquivalentTo(expectedResultDto,
+                o => o.Excluding(mi =>
+                    mi.DeclaringType == typeof(FileResultDto) && mi.Name == nameof(FileResultDto.FilePath)));
+
+            await AssertFileContentsAsync(saveResultDto!.File.FilePath, fileBytes);
+        }
+
+        [Fact]
         public async Task BindToParameter_AndStreamsAreUsedIncorrectly_OnlyFiles_ParameterIsBoundCorrectly_AndFilesAreEmpty()
         {
             // Arrange

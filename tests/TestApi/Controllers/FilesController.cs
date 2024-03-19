@@ -96,6 +96,26 @@ namespace Byndyusoft.TestApi.Controllers
             return resultDtos.ToArray();
         }
 
+        [HttpPost("SaveNewBySingleFile")]
+        [RequestSizeLimit(long.MaxValue)]
+        [SetFormStreamedDataValueProvider]
+        public async Task<ActionResult<SaveResultWithSingleFileDto>> SaveNewBySingleFile(
+            [FromFormStreamedData] NewRequestWithSingleFileDto requestDto,
+            CancellationToken cancellationToken)
+        {
+            var stopwatch = Stopwatch.StartNew();
+
+            var file = await requestDto.StreamedFile.ReadFileAsync(cancellationToken);
+            await using var stream = file.OpenReadStream();
+            var filePath = await _fileService.SaveFileAsync(stream, file.FileName, cancellationToken);
+            var fileResultDto = FileResultDtoMapper.MapFrom(file, filePath);
+
+            stopwatch.Stop();
+            _logger.LogInformation("{OperationName} took {Elapsed}", nameof(SaveNewWay), stopwatch.Elapsed);
+
+            return SaveResultDtoMapper.MapFrom(requestDto, fileResultDto);
+        }
+
         [HttpPost("SaveNewIncorrectly")]
         [RequestSizeLimit(long.MaxValue)]
         [SetFormStreamedDataValueProvider]

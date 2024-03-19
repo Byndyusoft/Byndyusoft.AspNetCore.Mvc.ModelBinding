@@ -21,5 +21,15 @@
                 Files = fileResultDtos
             };
         }
+
+        public static SaveResultWithSingleFileDto MapFrom(NewRequestWithSingleFileDto newRequestDto, FileResultDto fileResultDto)
+        {
+            return new SaveResultWithSingleFileDto
+            {
+                Name = newRequestDto.Name,
+                Age = newRequestDto.Age,
+                File = fileResultDto
+            };
+        }
     }
 }

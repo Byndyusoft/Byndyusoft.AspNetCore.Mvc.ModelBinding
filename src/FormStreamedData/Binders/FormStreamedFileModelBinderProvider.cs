@@ -12,7 +12,7 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Binders
         public IModelBinder? GetBinder(ModelBinderProviderContext context)
         {
             var modelType = context.Metadata.ModelType;
-            if (modelType == typeof(FormStreamedFileCollection))
+            if (modelType == typeof(FormStreamedFileCollection) || modelType == typeof(SingleFormStreamedFile))
                 return new FormStreamedFileModelBinder();
 
             return null;

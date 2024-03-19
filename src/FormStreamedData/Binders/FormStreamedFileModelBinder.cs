@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Extensions;
 using Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Values;
@@ -24,7 +25,14 @@ namespace Byndyusoft.AspNetCore.Mvc.ModelBinding.FormStreamedData.Binders
                 : bindingContext.ModelName;
 
             var files = await GetFormFilesAsync(bindingContext);
-            var value = new FormStreamedFileCollection(files);
+
+            object value;
+            if (bindingContext.ModelType == typeof(FormStreamedFileCollection))
+                value = new FormStreamedFileCollection(files);
+            else if (bindingContext.ModelType == typeof(SingleFormStreamedFile))
+                value = new SingleFormStreamedFile(files);
+            else
+                throw new InvalidOperationException("Unknown model type");
 
             // We need to add a ValidationState entry because the modelName might be non-standard. Otherwise
             // the entry we create in model state might not be marked as valid.
