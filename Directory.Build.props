@@ -8,7 +8,7 @@
 		<AssemblyName>Byndyusoft.$(MSBuildProjectName)</AssemblyName>
 		<RootNamespace>Byndyusoft.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
 		
-		<VersionPrefix>1.0.0</VersionPrefix>
+		<VersionPrefix>1.1.0</VersionPrefix>
 		<Authors>Byndyusoft</Authors>
 		
 		<PackageTags>Byndyusoft;AspNetCore;Mvc;MultipartFormData;Stream;File;FormData</PackageTags>
